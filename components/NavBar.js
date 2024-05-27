@@ -1,11 +1,9 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
 import Link from 'next/link';
 import {
   Navbar, //
   Container,
   Nav,
-  Button,
 } from 'react-bootstrap';
 import { signOut } from '../utils/auth';
 
@@ -23,12 +21,24 @@ export default function NavBar() {
             <Link passHref href="/">
               <Nav.Link>Home</Nav.Link>
             </Link>
-            <Link passHref href="/delete-me">
-              <Nav.Link>Delete Me</Nav.Link>
+            <Link passHref href="/favoritesList">
+              <Nav.Link>Favorites List</Nav.Link>
             </Link>
-            <Button variant="danger" onClick={signOut}>
-              Sign Out
-            </Button>
+            <Link passHref href="/cart">
+              <Nav.Link>Cart</Nav.Link>
+            </Link>
+            <Link passHref href="/orderHistory">
+              <Nav.Link>Order History</Nav.Link>
+            </Link>
+            <Link passHref href="/profile">
+              <Nav.Link>Profile</Nav.Link>
+            </Link>
+            <Nav>
+              <button type="button" onClick={signOut}>
+                Sign Out
+              </button>
+            </Nav>
+
           </Nav>
         </Navbar.Collapse>
       </Container>

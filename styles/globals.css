@@ -20,3 +20,68 @@ a {
 body {
   background-color: #88effd;
 }
+
+.user-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  margin: 16px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.user-card-image {
+  border-radius: 50%;
+  width: 100
+}
+.reviewCard {
+  display: flex;
+  align-items: flex-start;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 16px 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.userImageReview {
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  margin-right: 16px;
+}
+
+.reviewHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stars-container {
+  position: relative;
+  display: inline-block;
+  font-size: 24px; /* Adjust size as needed */
+}
+
+.stars-backdrop {
+  color: #ccc; /* Color for the empty stars */
+}
+
+.stars-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  color: gold; /* Color for the filled stars */
+}
+
+.review-card-btn-container {
+  display: flex;
+  gap: 8px;
+}
+
+.review-card-btn {
+  padding: 4px 8px;
+}
