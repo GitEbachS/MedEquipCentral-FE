@@ -23,13 +23,7 @@ const getCartIds = (userId) => new Promise((resolve, reject) => {
     },
   })
     .then((response) => response.json())
-    .then((data) => {
-      if (data) {
-        resolve(Object.values(data));
-      } else {
-        resolve([]);
-      }
-    })
+    .then((data) => resolve(data))
     .catch(reject);
 });
 
@@ -65,9 +59,9 @@ const getSingleOrderDetails = (userId, orderId) => new Promise((resolve, reject)
       'Content-Type': 'application/json',
     },
   })
-  .then((response) => response.json())
-  .then((data) => resolve(data))
-  .catch(reject);
+    .then((response) => response.json())
+    .then((data) => resolve(data))
+    .catch(reject);
 });
 
 const getOrderHistory = (userId) => new Promise((resolve, reject) => {
@@ -89,5 +83,5 @@ const getOrderHistory = (userId) => new Promise((resolve, reject) => {
 });
 
 export {
- getOrderTotal, getOrderHistory, closeOrder, createOpenOrder, getCartIds, getSingleOrderDetails,
+  getOrderTotal, getOrderHistory, closeOrder, createOpenOrder, getCartIds, getSingleOrderDetails,
 };
