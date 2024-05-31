@@ -15,12 +15,14 @@ function Products() {
   const [order, setOrder] = useState({});
   const [loadingUser, setLoadingUser] = useState(true);
   const [loadingProducts, setLoadingProducts] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   // get the single user
   const fetchUser = async () => {
     setLoadingUser(true);
     const userData = await getSingleUser(user.id);
     setCurrentUser(userData);
+    setIsAdmin(userData.isAdmin);
     const orderData = await createOpenOrder(user.id);
     setOrder(orderData);
     setLoadingUser(false);
@@ -111,7 +113,7 @@ function Products() {
               <div key={category.id}>
                 <h2>{category.name}</h2>
                 {category?.products.map((product) => (
-                  <ProductCard key={product.Id} productObj={product} onUpdate={getAllProducts} />
+                  <ProductCard key={product.Id} productObj={product} isAdmin={isAdmin} onUpdate={getAllProducts} />
                 ))}
               </div>
             ))

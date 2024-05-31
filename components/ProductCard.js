@@ -6,8 +6,9 @@ import { Image } from 'react-bootstrap';
 import { addProductToOrder, deleteProductFromOrder } from '../api/orderProductData';
 import { getCartIds, getSingleOrderDetails } from '../api/orderData';
 import { useAuth } from '../utils/context/authContext';
+import { deleteProduct } from '../api/productData';
 
-const ProductCard = ({ productObj }) => {
+const ProductCard = ({ productObj, onUpdate, isAdmin }) => {
   const { user } = useAuth();
   const [cart, setCart] = useState({});
   const [productCounts, setProductCounts] = useState({});
@@ -22,10 +23,12 @@ const ProductCard = ({ productObj }) => {
   const getOrder = async () => {
     const cartData = await getCartIds(user.id);
     setCart(cartData); // displays orderId with the list of Products: [id] in the order
-    if (cartData.orderId) {
-      const orderDetails = await getSingleOrderDetails(cartData.orderId, user.id);
-      setViewOrderDetails(orderDetails);
-    }
+    return cartData;
+  };
+
+  const fetchOrderDetails = async (orderId) => {
+    const orderDetails = await getSingleOrderDetails(user.id, orderId);
+    setViewOrderDetails(orderDetails);
     checkProduct();
   };
 
@@ -55,6 +58,12 @@ const ProductCard = ({ productObj }) => {
     getOrder();
   };
 
+  const deleteThisItem = () => {
+    if (window.confirm(`Delete ${productObj.name}?`)) {
+      deleteProduct(productObj.id).then(() => onUpdate());
+    }
+  };
+
   useEffect(() => {
     if (viewOrderdetails.products) {
       const counts = productCount(viewOrderdetails.products);
@@ -64,9 +73,16 @@ const ProductCard = ({ productObj }) => {
   }, [viewOrderdetails]);
 
   useEffect(() => {
-    getOrder();
+    if (user) {
+      getOrder().then((cartData) => {
+        if (cartData.orderId) {
+          fetchOrderDetails(cartData.orderId);
+        }
+        getOrder();
+      });
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [user]);
 
   return (
     <Card className="card-style" style={{ height: '350px' }}>
@@ -87,13 +103,22 @@ const ProductCard = ({ productObj }) => {
             <p key={productId}>{`Product ID: ${productId}, Count: ${productCounts[productId]}`}</p>
           ))}
         </div>
-
+        {isAdmin && (
         <div>
-          <button type="button" onClick={handleButtonClick}>{buttonText}</button>
-          <Link href={`/product/edit/${productObj.id}`} passHref>
-            <button type="button">Edit Product</button>
-          </Link>
+          <div>
+            <button type="button" onClick={handleButtonClick}>{buttonText}</button>
+            <Link href={`/product/edit/${productObj.id}`} passHref>
+              <button type="button">Edit Product</button>
+            </Link>
+          </div>
+          <div>
+            <button type="button" size="sm" onClick={deleteThisItem} className="deleteBtn m-2">
+              DELETE
+            </button>
+          </div>
         </div>
+        )}
+
       </Card.Body>
 
     </Card>
@@ -113,6 +138,8 @@ ProductCard.propTypes = {
     description: PropTypes.string,
     price: PropTypes.number,
   }).isRequired,
+  isAdmin: PropTypes.bool.isRequired,
+  onUpdate: PropTypes.func.isRequired,
 };
 
 export default ProductCard;
