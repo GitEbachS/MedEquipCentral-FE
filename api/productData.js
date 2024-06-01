@@ -33,7 +33,7 @@ const getSingleProduct = (productId) => new Promise((resolve, reject) => {
 });
 
 const createProduct = (payload) => new Promise((resolve, reject) => {
-  fetch(`${endpoint}/products/new`, {
+  fetch(`${endpoint}/product/new`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

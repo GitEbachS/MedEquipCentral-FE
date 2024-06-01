@@ -44,7 +44,7 @@ const ProductForm = ({ productObj }) => {
     if (productObj.id) setFormInput(productObj);
     categoryInfo();
   }, [productObj]);
-  console.warn(categories);
+
   return (
     <Form onSubmit={handleSubmit}>
       <h2 className="text-white mt-5">{productObj.id ? 'Update' : 'Create'} Product</h2>
@@ -75,7 +75,6 @@ const ProductForm = ({ productObj }) => {
         <Form.Control
           type="number"
           name="price"
-          placeholder="Add product's price $..."
           value={formInput.price}
           onChange={handleChange}
           required

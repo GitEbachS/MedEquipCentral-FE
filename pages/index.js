@@ -6,6 +6,7 @@ import { getSingleUser } from '../api/userData';
 import UserForm from '../components/forms/UserForm';
 import { filteredCategories, getCategories } from '../api/categoryData';
 import { createOpenOrder } from '../api/orderData';
+import { deleteProduct } from '../api/productData';
 
 function Products() {
   const { user } = useAuth();
@@ -51,6 +52,26 @@ function Products() {
     }
   };
 
+  const handleDelete = (productId) => {
+    const isConfirmed = window.confirm('Delete this product?');
+    if (isConfirmed) {
+      deleteProduct(productId)
+        .then(() => {
+          setCatProducts((prevState) => {
+            // Filter out the deleted product from the state
+            const updatedProducts = prevState.map((category) => ({
+              ...category,
+              products: category.products.filter((product) => product.id !== productId),
+            }));
+            return updatedProducts;
+          });
+        })
+        .catch((err) => {
+          console.error('Error deleting post:', err);
+        });
+    }
+  };
+
   // Reset product list to show all products
   const handleResetProducts = async () => {
     try {
@@ -82,7 +103,8 @@ function Products() {
   if (loadingUser || loadingProducts) {
     return <p>Loading...</p>;
   }
-
+  // Ensure catProducts is an array before accessing its length
+  const isCatProductsAvailable = Array.isArray(catProducts);
   // const filteredCatProducts = selectedCategory
   //   ? catProducts.filter((category) => category.name === selectedCategory)
   //   : catProducts;
@@ -114,12 +136,12 @@ function Products() {
               <button type="button">Create Product</button>
             </Link>
           </div>
-          {catProducts.length ? (
+          {isCatProductsAvailable && catProducts.length > 0 ? (
             catProducts.map((category) => (
               <div key={category.id}>
                 <h2>{category.name}</h2>
                 {category?.products.map((product) => (
-                  <ProductCard key={product.id} productObj={product} isAdmin={isAdmin} onUpdate={getAllProducts} />
+                  <ProductCard key={product.id} productObj={product} isAdmin={isAdmin} onDelete={handleDelete} />
                 ))}
               </div>
             ))

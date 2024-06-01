@@ -20,11 +20,17 @@ const getCartIds = (userId) => new Promise((resolve, reject) => {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
+      // Include other headers if needed, such as Authorization
     },
   })
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
     .then((data) => resolve(data))
-    .catch(reject);
+    .catch((error) => reject(error));
 });
 
 const createOpenOrder = (userId) => new Promise((resolve, reject) => {
