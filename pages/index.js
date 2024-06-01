@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { useAuth } from '../utils/context/authContext';
 import ProductCard from '../components/ProductCard';
 import { getSingleUser } from '../api/userData';
@@ -107,6 +108,11 @@ function Products() {
                 {category.name}
               </button>
             ))}
+          </div>
+          <div>
+            <Link href="/product/new" passHref>
+              <button type="button">Create Product</button>
+            </Link>
           </div>
           {catProducts.length ? (
             catProducts.map((category) => (
