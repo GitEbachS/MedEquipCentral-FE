@@ -36,7 +36,7 @@ const createOpenOrder = (userId) => new Promise((resolve, reject) => {
     // body: JSON.stringify(payload),
   })
     .then((response) => response.json())
-    .then(resolve)
+    .then((data) => resolve(data))
     .catch(reject);
 });
 
@@ -48,7 +48,7 @@ const closeOrder = (userId, orderId, payload) => new Promise((resolve, reject) =
     },
     body: JSON.stringify(payload),
   })
-    .then(resolve)
+    .then((data) => resolve(data))
     .catch(reject);
 });
 

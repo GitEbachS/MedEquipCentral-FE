@@ -119,7 +119,7 @@ function Products() {
               <div key={category.id}>
                 <h2>{category.name}</h2>
                 {category?.products.map((product) => (
-                  <ProductCard key={product.Id} productObj={product} isAdmin={isAdmin} onUpdate={getAllProducts} />
+                  <ProductCard key={product.id} productObj={product} isAdmin={isAdmin} onUpdate={getAllProducts} />
                 ))}
               </div>
             ))

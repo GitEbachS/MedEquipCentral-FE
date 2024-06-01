@@ -28,7 +28,7 @@ const getSingleProduct = (productId) => new Promise((resolve, reject) => {
     },
   })
     .then((response) => response.json())
-    .then(resolve)
+    .then((data) => resolve(data))
     .catch(reject);
 });
 
@@ -41,7 +41,7 @@ const createProduct = (payload) => new Promise((resolve, reject) => {
     body: JSON.stringify(payload),
   })
     .then((response) => response.json())
-    .then(resolve)
+    .then((data) => resolve(data))
     .catch(reject);
 });
 
@@ -70,7 +70,7 @@ const updateProduct = (productId, payload) => new Promise((resolve, reject) => {
     },
     body: JSON.stringify(payload),
   })
-    .then(resolve)
+    .then((data) => resolve(data))
     .catch(reject);
 });
 
@@ -82,7 +82,7 @@ const deleteProduct = (productId) => new Promise((resolve, reject) => {
     },
   })
     // .then((response) => response.json())
-    .then(resolve)
+    .then((data) => resolve(data))
     .catch(reject);
 });
 

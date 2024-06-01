@@ -11,7 +11,7 @@ const createReview = (payload) => new Promise((resolve, reject) => {
     body: JSON.stringify(payload),
   })
     .then((response) => response.json())
-    .then(resolve)
+    .then((data) => resolve(data))
     .catch(reject);
 });
 
@@ -23,7 +23,7 @@ const updateReview = (reviewId, payload) => new Promise((resolve, reject) => {
     },
     body: JSON.stringify(payload),
   })
-    .then(resolve)
+    .then((data) => resolve(data))
     .catch(reject);
 });
 
@@ -35,7 +35,7 @@ const deleteReview = (reviewId) => new Promise((resolve, reject) => {
     },
   })
     // .then((response) => response.json())
-    .then(resolve)
+    .then((data) => resolve(data))
     .catch(reject);
 });
 
