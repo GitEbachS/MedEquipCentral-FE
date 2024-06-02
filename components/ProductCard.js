@@ -11,15 +11,17 @@ const ProductCard = ({ productObj, onDelete, isAdmin }) => {
   const { user } = useAuth();
   const [cart, setCart] = useState({});
   const [viewOrderDetails, setViewOrderDetails] = useState({});
+  const [productArray, setProductArray] = useState([]);
   const [buttonText, setButtonText] = useState('');
 
   const getOrder = async () => {
-    const cartData = await getCartIds(user.id);
-    setCart(cartData);
+    const cartInfo = await getCartIds(user.id);
+    setCart(cartInfo);
+    setProductArray(cartInfo?.products || []);
   };
 
   const fetchOrderDetails = async () => {
-    if (cart?.orderId) {
+    if (cart.orderId) {
       const orderDetails = await getSingleOrderDetails(user.id, cart.orderId);
       setViewOrderDetails(orderDetails);
     }
@@ -27,7 +29,7 @@ const ProductCard = ({ productObj, onDelete, isAdmin }) => {
   };
 
   const checkProduct = () => {
-    const isProductAdded = cart.products?.some((productId) => productId === productObj.id);
+    const isProductAdded = productArray.some((productId) => productId === productObj.id);
     if (isProductAdded === true) {
       setButtonText('Remove From Order');
     } else {
@@ -37,7 +39,7 @@ const ProductCard = ({ productObj, onDelete, isAdmin }) => {
 
   const handleButtonClick = async () => {
     try {
-      const isProductAdded = cart.products?.some((productId) => productId === productObj.id);
+      const isProductAdded = productArray.some((productId) => productId === productObj.id);
       if (!isProductAdded) {
         const payload = {
           productId: productObj.id,
@@ -52,31 +54,35 @@ const ProductCard = ({ productObj, onDelete, isAdmin }) => {
         await deleteProductFromOrder(cart.orderId, productObj.id);
         setButtonText('Add to Order');
       }
+      getOrder();
     } catch (error) {
       console.error('Error occurred:', error);
     }
   };
 
   const productQuantityInOrder = () => {
-    if (viewOrderDetails && viewOrderDetails.products) {
+    if (viewOrderDetails && viewOrderDetails?.products) {
       const orderProduct = viewOrderDetails.products.find((product) => product.id === productObj.id);
       return orderProduct ? orderProduct.quantity : 0;
     }
     return 0; // Default to 0 if viewOrderdetails or viewOrderdetails.products is undefined
   };
+
   useEffect(() => {
     getOrder();
-    fetchOrderDetails();
-    checkProduct();
-    productQuantityInOrder();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, productObj]);
 
   useEffect(() => {
-    checkProduct();
-    productQuantityInOrder();
+    fetchOrderDetails();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cart, buttonText]);
+  }, [cart]);
+
+  useEffect(() => {
+    checkProduct();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [productArray]);
+
   return (
     <div>
       <Card className="card-style" style={{ height: '450px' }}>
