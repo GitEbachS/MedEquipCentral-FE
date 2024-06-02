@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import Form from 'react-bootstrap/Form';
 import PropTypes from 'prop-types';
 import { createProduct, updateProduct } from '../../api/productData';
-import getCategories from '../../api/categoryData';
+import { getCategories } from '../../api/categoryData';
 
 const intitialState = {
   name: '',
@@ -19,10 +19,15 @@ const ProductForm = ({ productObj }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    const parsedValue = (name === 'price' || name === 'categoryId') ? Number(value) : value;
     setFormInput((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: parsedValue,
     }));
+  };
+
+  const categoryInfo = () => {
+    getCategories().then(setCategories);
   };
 
   const handleSubmit = async (e) => {
@@ -30,13 +35,14 @@ const ProductForm = ({ productObj }) => {
     if (productObj.id) {
       updateProduct(productObj.id, formInput).then(() => router.push(`/product/${productObj.id}`));
     } else {
+      console.warn(formInput);
       createProduct(formInput)?.then((product) => router.push(`/product/${product.id}`));
     }
   };
 
   useEffect(() => {
     if (productObj.id) setFormInput(productObj);
-    getCategories().then(setCategories);
+    categoryInfo();
   }, [productObj]);
 
   return (
@@ -69,7 +75,6 @@ const ProductForm = ({ productObj }) => {
         <Form.Control
           type="number"
           name="price"
-          placeholder="Add product's price $..."
           value={formInput.price}
           onChange={handleChange}
           required
@@ -88,7 +93,7 @@ const ProductForm = ({ productObj }) => {
         />
       </Form.Group>
 
-      {categories ? (
+      {categories && (
         <Form.Group className="mb-3">
           <Form.Select
             aria-label="Category"
@@ -105,7 +110,7 @@ const ProductForm = ({ productObj }) => {
 
           </Form.Select>
         </Form.Group>
-      ) : null}
+      )}
 
       <button type="submit">{productObj.id ? 'Update' : 'Create'} Product</button>
     </Form>
@@ -117,9 +122,9 @@ ProductForm.propTypes = {
     id: PropTypes.number,
     name: PropTypes.string,
     image: PropTypes.string,
-    categoryId: PropTypes.number,
     description: PropTypes.string,
     price: PropTypes.number,
+    categoryId: PropTypes.number,
   }),
 };
 ProductForm.defaultProps = {

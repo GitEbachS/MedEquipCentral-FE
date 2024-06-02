@@ -20,17 +20,17 @@ const getCartIds = (userId) => new Promise((resolve, reject) => {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
+      // Include other headers if needed, such as Authorization
     },
   })
-    .then((response) => response.json())
-    .then((data) => {
-      if (data) {
-        resolve(Object.values(data));
-      } else {
-        resolve([]);
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
+      return response.json();
     })
-    .catch(reject);
+    .then((data) => resolve(data))
+    .catch((error) => reject(error));
 });
 
 const createOpenOrder = (userId) => new Promise((resolve, reject) => {
@@ -42,7 +42,7 @@ const createOpenOrder = (userId) => new Promise((resolve, reject) => {
     // body: JSON.stringify(payload),
   })
     .then((response) => response.json())
-    .then(resolve)
+    .then((data) => resolve(data))
     .catch(reject);
 });
 
@@ -54,7 +54,7 @@ const closeOrder = (userId, orderId, payload) => new Promise((resolve, reject) =
     },
     body: JSON.stringify(payload),
   })
-    .then(resolve)
+    .then((data) => resolve(data))
     .catch(reject);
 });
 
@@ -65,9 +65,9 @@ const getSingleOrderDetails = (userId, orderId) => new Promise((resolve, reject)
       'Content-Type': 'application/json',
     },
   })
-  .then((response) => response.json())
-  .then((data) => resolve(data))
-  .catch(reject);
+    .then((response) => response.json())
+    .then((data) => resolve(data))
+    .catch(reject);
 });
 
 const getOrderHistory = (userId) => new Promise((resolve, reject) => {
@@ -89,5 +89,5 @@ const getOrderHistory = (userId) => new Promise((resolve, reject) => {
 });
 
 export {
- getOrderTotal, getOrderHistory, closeOrder, createOpenOrder, getCartIds, getSingleOrderDetails,
+  getOrderTotal, getOrderHistory, closeOrder, createOpenOrder, getCartIds, getSingleOrderDetails,
 };

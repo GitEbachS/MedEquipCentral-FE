@@ -24,7 +24,7 @@ const updateOrderProductQuantity = (payload) => new Promise((resolve, reject) =>
     },
     body: JSON.stringify(payload),
   })
-    .then(resolve)
+    .then((data) => resolve(data))
     .catch(reject);
 });
 
@@ -36,10 +36,9 @@ const deleteProductFromOrder = (orderId, productId) => new Promise((resolve, rej
     },
   })
     // .then((response) => response.json())
-    .then(resolve)
+    .then((data) => resolve(data))
     .catch(reject);
 });
-
 
 export {
   addProductToOrder, deleteProductFromOrder, updateOrderProductQuantity,

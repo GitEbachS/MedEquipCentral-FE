@@ -7,96 +7,123 @@ import { addProductToOrder, deleteProductFromOrder } from '../api/orderProductDa
 import { getCartIds, getSingleOrderDetails } from '../api/orderData';
 import { useAuth } from '../utils/context/authContext';
 
-const ProductCard = ({ productObj }) => {
+const ProductCard = ({ productObj, onDelete, isAdmin }) => {
   const { user } = useAuth();
   const [cart, setCart] = useState({});
-  const [productCounts, setProductCounts] = useState({});
-  const [viewOrderdetails, setViewOrderDetails] = useState({});
+  const [viewOrderDetails, setViewOrderDetails] = useState({});
+  const [productArray, setProductArray] = useState([]);
   const [buttonText, setButtonText] = useState('');
 
-  const checkProduct = () => {
-    const isProductAdded = cart.products?.some((productId) => productId === productObj.id);
-    setButtonText(isProductAdded ? 'Remove From Order' : 'Add to Order');
+  const getOrder = async () => {
+    const cartInfo = await getCartIds(user.id);
+    setCart(cartInfo);
+    setProductArray(cartInfo?.products || []);
   };
 
-  const getOrder = async () => {
-    const cartData = await getCartIds(user.id);
-    setCart(cartData); // displays orderId with the list of Products: [id] in the order
-    if (cartData.orderId) {
-      const orderDetails = await getSingleOrderDetails(cartData.orderId, user.id);
+  const fetchOrderDetails = async () => {
+    if (cart.orderId) {
+      const orderDetails = await getSingleOrderDetails(user.id, cart.orderId);
       setViewOrderDetails(orderDetails);
     }
-    checkProduct();
+    return null;
   };
 
-  const productCount = () => {
-    const counts = {};
-    viewOrderdetails?.products.forEach((product) => {
-      const productId = product.id;
-      if (counts[productId]) {
-        counts[productId] += 1;
-      } else {
-        counts[productId] = 1;
-      }
-    });
-    return counts;
+  const checkProduct = () => {
+    const isProductAdded = productArray.some((productId) => productId === productObj.id);
+    if (isProductAdded === true) {
+      setButtonText('Remove From Order');
+    } else {
+      setButtonText('Add to Order');
+    }
   };
 
   const handleButtonClick = async () => {
-    const payload = {
-      productId: productObj.id,
-      orderId: cart.orderId,
-    };
-    if (buttonText === 'Add to Order') {
-      await addProductToOrder(payload);
-    } else {
-      await deleteProductFromOrder(user.id, productObj.id);
+    try {
+      const isProductAdded = productArray.some((productId) => productId === productObj.id);
+      if (!isProductAdded) {
+        const payload = {
+          productId: productObj.id,
+          orderId: cart.orderId,
+        };
+        await addProductToOrder(payload);
+        setButtonText('Remove from Order');
+        // Fetch and update the order details after modifying the cart
+        const updatedOrderDetails = await getSingleOrderDetails(user.id, cart.orderId);
+        setViewOrderDetails(updatedOrderDetails);
+      } else {
+        await deleteProductFromOrder(cart.orderId, productObj.id);
+        setButtonText('Add to Order');
+      }
+      getOrder();
+    } catch (error) {
+      console.error('Error occurred:', error);
     }
-    getOrder();
+  };
+
+  const productQuantityInOrder = () => {
+    if (viewOrderDetails && viewOrderDetails?.products) {
+      const orderProduct = viewOrderDetails.products.find((product) => product.id === productObj.id);
+      return orderProduct ? orderProduct.quantity : 0;
+    }
+    return 0; // Default to 0 if viewOrderdetails or viewOrderdetails.products is undefined
   };
 
   useEffect(() => {
-    if (viewOrderdetails.products) {
-      const counts = productCount(viewOrderdetails.products);
-      setProductCounts(counts);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [viewOrderdetails]);
-
-  useEffect(() => {
     getOrder();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [user, productObj]);
+
+  useEffect(() => {
+    fetchOrderDetails();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cart]);
+
+  useEffect(() => {
+    checkProduct();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [productArray]);
 
   return (
-    <Card className="card-style" style={{ height: '350px' }}>
-      <Card.Body>
-        <Link href={`/product/${productObj.id}`} passHref>
-          <Image src={productObj.image} alt={productObj.name} style={{ height: '100px' }} />
-        </Link>
-
-        <div className="product-details">
-          <h2>{productObj.name}</h2>
-          <p>Price: ${productObj.price}</p>
-          <p>Description: {productObj.description}</p>
-          <p>Category: {productObj.category?.name}</p>
-        </div>
-
-        <div>
-          {Object.keys(productCounts).map((productId) => (
-            <p key={productId}>{`Product ID: ${productId}, Count: ${productCounts[productId]}`}</p>
-          ))}
-        </div>
-
-        <div>
-          <button type="button" onClick={handleButtonClick}>{buttonText}</button>
-          <Link href={`/product/edit/${productObj.id}`} passHref>
-            <button type="button">Edit Product</button>
+    <div>
+      <Card className="card-style" style={{ height: '450px' }}>
+        <Card.Body>
+          <Link href={`/product/${productObj.id}`} passHref>
+            <Image src={productObj.image} alt={productObj.name} style={{ height: '100px' }} />
           </Link>
-        </div>
-      </Card.Body>
 
-    </Card>
+          <div className="product-details">
+            <h2>{productObj.name}</h2>
+            <p>Price: ${productObj.price}</p>
+            <p>Description: {productObj.description}</p>
+            <p>Category: {productObj.category?.name}</p>
+            {productQuantityInOrder() > 0 && <p>{productQuantityInOrder()} in order</p>}
+          </div>
+
+          {isAdmin && (
+          <div>
+            <div>
+              <button type="button" onClick={handleButtonClick}>
+                {buttonText}
+              </button>
+
+              <Link href={`/product/edit/${productObj.id}`} passHref>
+                <button type="button">Edit Product</button>
+              </Link>
+            </div>
+            <div>
+              <button type="button" size="sm" onClick={() => onDelete(productObj.id)} className="deleteBtn m-2">
+                DELETE
+              </button>
+            </div>
+          </div>
+
+          )}
+
+        </Card.Body>
+
+      </Card>
+
+    </div>
   );
 };
 
@@ -105,6 +132,7 @@ ProductCard.propTypes = {
     id: PropTypes.number,
     name: PropTypes.string,
     image: PropTypes.string,
+    quantity: PropTypes.number,
     categoryId: PropTypes.number,
     category: PropTypes.shape({
       id: PropTypes.number,
@@ -113,6 +141,11 @@ ProductCard.propTypes = {
     description: PropTypes.string,
     price: PropTypes.number,
   }).isRequired,
+  isAdmin: PropTypes.bool.isRequired,
+  onDelete: PropTypes.func,
+};
+ProductCard.defaultProps = {
+  onDelete: null,
 };
 
 export default ProductCard;

@@ -23,7 +23,7 @@ export default function Profile() {
     getUserDetails();
     allReviews();
   }, [user]);
-  console.warn(userReviews.length);
+
   return (
     <>
       <div>

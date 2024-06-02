@@ -41,7 +41,7 @@ const deleteSimilarItem = (productId, similarProductId, userId) => new Promise((
     },
   })
     .then((response) => response.json())
-    .then(resolve)
+    .then((data) => resolve(data))
     .catch(reject);
 });
 

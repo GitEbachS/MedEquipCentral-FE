@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { useAuth } from '../utils/context/authContext';
 import ProductCard from '../components/ProductCard';
 import { getSingleUser } from '../api/userData';
 import UserForm from '../components/forms/UserForm';
 import { filteredCategories, getCategories } from '../api/categoryData';
 import { createOpenOrder } from '../api/orderData';
+import { deleteProduct } from '../api/productData';
 
 function Products() {
   const { user } = useAuth();
@@ -15,12 +17,14 @@ function Products() {
   const [order, setOrder] = useState({});
   const [loadingUser, setLoadingUser] = useState(true);
   const [loadingProducts, setLoadingProducts] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   // get the single user
   const fetchUser = async () => {
     setLoadingUser(true);
     const userData = await getSingleUser(user.id);
     setCurrentUser(userData);
+    setIsAdmin(userData.isAdmin);
     const orderData = await createOpenOrder(user.id);
     setOrder(orderData);
     setLoadingUser(false);
@@ -45,6 +49,26 @@ function Products() {
       setSelectedCategory(categoryName);
     } catch (error) {
       console.error('Error filtering products by category:', error);
+    }
+  };
+
+  const handleDelete = (productId) => {
+    const isConfirmed = window.confirm('Delete this product?');
+    if (isConfirmed) {
+      deleteProduct(productId)
+        .then(() => {
+          setCatProducts((prevState) => {
+            // Filter out the deleted product from the state
+            const updatedProducts = prevState.map((category) => ({
+              ...category,
+              products: category.products.filter((product) => product.id !== productId),
+            }));
+            return updatedProducts;
+          });
+        })
+        .catch((err) => {
+          console.error('Error deleting post:', err);
+        });
     }
   };
 
@@ -79,7 +103,8 @@ function Products() {
   if (loadingUser || loadingProducts) {
     return <p>Loading...</p>;
   }
-
+  // Ensure catProducts is an array before accessing its length
+  const isCatProductsAvailable = Array.isArray(catProducts);
   // const filteredCatProducts = selectedCategory
   //   ? catProducts.filter((category) => category.name === selectedCategory)
   //   : catProducts;
@@ -106,12 +131,17 @@ function Products() {
               </button>
             ))}
           </div>
-          {catProducts.length ? (
+          <div>
+            <Link href="/product/new" passHref>
+              <button type="button">Create Product</button>
+            </Link>
+          </div>
+          {isCatProductsAvailable && catProducts.length > 0 ? (
             catProducts.map((category) => (
               <div key={category.id}>
                 <h2>{category.name}</h2>
                 {category?.products.map((product) => (
-                  <ProductCard key={product.Id} productObj={product} onUpdate={getAllProducts} />
+                  <ProductCard key={product.id} productObj={product} isAdmin={isAdmin} onDelete={handleDelete} />
                 ))}
               </div>
             ))

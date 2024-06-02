@@ -34,7 +34,7 @@ const OrderHistoryPage = () => {
               <div>Order ID: {order.id}</div>
               <div>Total Price: ${order.total}</div>
               <div>Status: {order.isClosed ? 'Closed' : 'Open'}</div>
-              <Link href={`/order/${order.id}`} passHref>
+              <Link href={`/order/${user.id}`} passHref>
                 <button type="button">View Details</button>
               </Link>
               <button type="button" onClick={() => handleReorder(order.id)}>Reorder</button>
