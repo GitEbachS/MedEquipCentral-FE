@@ -34,28 +34,36 @@ function AddSimilarItems() {
   };
 
   const checkSimilarItems = async () => {
-    const similarray = await getSimilarItems(id);
-    const isSimilarItem = similarray.some((item) => item.id === id);
+    if (id) {
+      const similarray = await getSimilarItems(id);
+      const isSimilarItem = similarray.map((item) => item.id);
 
-    if (isSimilarItem) {
-      setButtonText('-');
-    } else {
-      setButtonText('+');
+      if (isSimilarItem.includes(id)) {
+        setButtonText('-');
+      } else {
+        setButtonText('+');
+      }
     }
   };
 
-  const handleListClick = (productId) => {
-    if (!similarItems.id === productId) {
+  const handleListClick = async (productId) => {
+    const similarray = await getSimilarItems(id);
+    const isSimilarItem = similarray.map((item) => item.id);
+    if (!isSimilarItem.includes(productId)) {
       const payload = {
         similarProductId: productId,
       };
-      addSimilarItem(singleProduct.id, user.id, payload).then(() => viewProducts());
+      addSimilarItem(singleProduct.id, user.id, payload).then(() => similarProductList());
       setButtonText('-');
     } else {
       deleteSimilarItem(id, productId, user.id).then(() => viewProducts());
       setButtonText('+');
     }
   };
+  useEffect(() => {
+    similarProductList();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [similarItems]);
 
   useEffect(() => {
     fetchUser();
@@ -65,7 +73,6 @@ function AddSimilarItems() {
   useEffect(() => {
     checkSimilarItems();
     viewProducts();
-    similarProductList();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
@@ -91,12 +98,13 @@ function AddSimilarItems() {
       </div>
       <div className="similar-container">
         {similarItems.map((similarProduct) => (
-          <div>
+          <div key={similarProduct.id}>
             <Card className="card-style" style={{ height: '250px' }}>
               <Card.Body>
 
                 <div className="similarProduct-details">
                   <h2>{similarProduct.name}</h2>
+                  <Image src={similarProduct.image} alt={similarProduct.name} style={{ height: '100px' }} />
                   <p>Category: {similarProduct.category?.name}</p>
                 </div>
 
@@ -109,7 +117,7 @@ function AddSimilarItems() {
       </div>
       <div className="similar-container">
         {allProducts.map((product) => (
-          <div>
+          <div key={product.id}>
             <Card className="card-style" style={{ height: '250px' }}>
               <Card.Body>
                 <button type="button" onClick={() => handleListClick(product.id)}>{buttonText}</button>
