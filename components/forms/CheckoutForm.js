@@ -1,43 +1,44 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import PropTypes from 'prop-types';
 import { Form } from 'react-bootstrap';
-import { closeOrder, getOrderTotal } from '../../api/orderData';
+import PropTypes from 'prop-types';
+import { closeOrder } from '../../api/orderData';
 
 const intitialState = {
-  creditCardNumber: -1,
+  creditCardNumber: '',
   expirationDate: '',
-  cvv: -1,
-  zip: -1,
+  cvv: '',
+  zip: '',
 };
 const Checkout = ({ orderObj }) => {
   const router = useRouter();
+  const { totalPrice } = router.query;
   const [formInput, setFormInput] = useState(intitialState);
-  const [total, setTotal] = useState(0);
+  const [order, setOrder] = useState();
+  const [person, setPerson] = useState();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+
+    const newValue = name === 'creditCardNumber' || name === 'cvv' || name === 'zip' ? Number(value) : value;
+
     setFormInput((prevState) => ({
       ...prevState,
-      [name]: value,
+      [name]: newValue,
     }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    closeOrder({ ...formInput, orderId: orderObj.id, userId: orderObj.userId }).then(() => router.router.push('/confirmation'));
+    closeOrder(person, order, formInput).then(() => router.push('/confirmation'));
   };
-
   useEffect(() => {
-    const fetchOrderTotal = async () => {
-      try {
-        const totalData = await getOrderTotal(orderObj.id, orderObj.userId);
-        setTotal(totalData.total);
-      } catch (error) {
-        // Handle error
-      }
-    };
-    fetchOrderTotal();
+    if (orderObj) {
+      // Ensure the form input is reset when orderObj changes
+      setFormInput(intitialState);
+      setOrder(orderObj.id);
+      setPerson(orderObj.userId);
+    }
   }, [orderObj]);
 
   return (
@@ -46,6 +47,7 @@ const Checkout = ({ orderObj }) => {
       <Form.Group className="mb-3">
         <Form.Label>Credit Card Number:</Form.Label>
         <Form.Control
+          type="number"
           name="creditCardNumber"
           value={formInput.creditCardNumber}
           onChange={handleChange}
@@ -68,6 +70,7 @@ const Checkout = ({ orderObj }) => {
       <Form.Group className="mb-3">
         <Form.Label>CCV:</Form.Label>
         <Form.Control
+          type="number"
           name="cvv"
           value={formInput.cvv}
           onChange={handleChange}
@@ -79,6 +82,7 @@ const Checkout = ({ orderObj }) => {
       <Form.Group className="mb-3">
         <Form.Label>Zip Code:</Form.Label>
         <Form.Control
+          type="number"
           name="zip"
           value={formInput.zip}
           onChange={handleChange}
@@ -87,7 +91,7 @@ const Checkout = ({ orderObj }) => {
         />
       </Form.Group>
 
-      <p>Total Amount Due: ${total}</p>
+      <p>Total Amount Due: ${totalPrice}</p>
       <button type="submit">Submit Order</button>
     </Form>
   );
@@ -108,66 +112,3 @@ Checkout.propTypes = {
 };
 
 export default Checkout;
-// const Cart = () => {
-//   const { userId, orderId } = useParams();
-//   const history = useHistory();
-//   const [order, setOrder] = useState(null);
-//   const [loading, setLoading] = useState(true);
-//   const [error, setError] = useState(null);
-
-//   useEffect(() => {
-//     const fetchOrderDetails = async () => {
-//       try {
-//         const orderData = await getTheSingleOrder(userId, orderId);
-//         setOrder(orderData);
-//       } catch (error) {
-//         setError('Failed to fetch order details.');
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-//     fetchOrderDetails();
-//   }, [userId, orderId]);
-
-//   const handleRemoveProduct = async (productId) => {
-//     try {
-//       await removeProductFromOrder(orderId, productId);
-//       const updatedOrder = await getTheSingleOrder(userId, orderId);
-//       setOrder(updatedOrder);
-//     } catch (error) {
-//       setError('Failed to remove product from order.');
-//     }
-//   };
-
-//   const handleCheckout = () => {
-//     history.push(`/checkout/${userId}/${orderId}`);
-//   };
-
-//   if (loading) {
-//     return <div>Loading...</div>;
-//   }
-
-//   if (error) {
-//     return <div>{error}</div>;
-//   }
-
-//   return (
-//     <div>
-//       <h1>Order Details</h1>
-//       {order ? (
-//         <div>
-//           <h2>Order ID: {order.id}</h2>
-//           <h3>User Information</h3>
-//           <p>Name: {order.user.firstName} {order.user.lastName}</p>
-//           <p>Email: {order.user.email}</p>
-//           <p>Address: {order.user.address}</p>
-//           <h3>Products</h3>
-//           {order.products.length > 0 ? (
-//             order.products.map(product => (
-//               <div key={product.id}>
-//                 <h4>{product.name}</h4>
-//                 <img src={product.image} alt={product.name} />
-//                 <p>Category: {product.category.name}</p>
-//                 <p>Description: {product.description}</p>
-//                 <p>Price: ${product.price}</p>
-//                 <button onClick={() => handle

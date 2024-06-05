@@ -70,6 +70,18 @@ const getSingleOrderDetails = (userId, orderId) => new Promise((resolve, reject)
     .catch(reject);
 });
 
+const getSingleOrderHistory = (userId, orderId) => new Promise((resolve, reject) => {
+  fetch(`${endpoint}/orders/${userId}/single/${orderId}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => resolve(data))
+    .catch(reject);
+});
+
 const getOrderHistory = (userId) => new Promise((resolve, reject) => {
   fetch(`${endpoint}/orderHistory/${userId}`, {
     method: 'GET',
@@ -89,5 +101,5 @@ const getOrderHistory = (userId) => new Promise((resolve, reject) => {
 });
 
 export {
-  getOrderTotal, getOrderHistory, closeOrder, createOpenOrder, getCartIds, getSingleOrderDetails,
+  getOrderTotal, getOrderHistory, closeOrder, createOpenOrder, getCartIds, getSingleOrderDetails, getSingleOrderHistory,
 };

@@ -6,10 +6,8 @@ import {
   Nav,
 } from 'react-bootstrap';
 import { signOut } from '../utils/auth';
-import { useAuth } from '../utils/context/authContext';
 
 export default function NavBar() {
-  const { user } = useAuth();
   return (
     <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
       <Container>
@@ -26,7 +24,7 @@ export default function NavBar() {
             <Link passHref href="/favoritesList">
               <Nav.Link>Favorites List</Nav.Link>
             </Link>
-            <Link passHref href={`/order/${user.id}`}>
+            <Link passHref href="/cart">
               <Nav.Link>Cart</Nav.Link>
             </Link>
             <Link passHref href="/orderHistory">
@@ -34,6 +32,9 @@ export default function NavBar() {
             </Link>
             <Link passHref href="/profile">
               <Nav.Link>Profile</Nav.Link>
+            </Link>
+            <Link passHref href="/similarItems">
+              <Nav.Link>Similar Items</Nav.Link>
             </Link>
             <Nav>
               <button type="button" onClick={signOut}>

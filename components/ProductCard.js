@@ -6,12 +6,14 @@ import { Image } from 'react-bootstrap';
 import { addProductToOrder, deleteProductFromOrder } from '../api/orderProductData';
 import { getCartIds, getSingleOrderDetails } from '../api/orderData';
 import { useAuth } from '../utils/context/authContext';
+import { addToFavoriteslist, getFavoritesList, removeFromFavoriteslist } from '../api/favoritesListData';
 
 const ProductCard = ({ productObj, onDelete, isAdmin }) => {
   const { user } = useAuth();
   const [cart, setCart] = useState({});
   const [viewOrderDetails, setViewOrderDetails] = useState({});
   const [productArray, setProductArray] = useState([]);
+  const [listText, setListText] = useState('');
   const [buttonText, setButtonText] = useState('');
 
   const getOrder = async () => {
@@ -60,6 +62,47 @@ const ProductCard = ({ productObj, onDelete, isAdmin }) => {
     }
   };
 
+  const handleListClick = async (productId) => {
+    try {
+      // Get the user's favorite list
+      const userFavorites = await getFavoritesList(user.id);
+
+      // Check if the product is already in the user's favorite list
+      const isProductInFavorites = userFavorites.some((category) => category.products.some((product) => product.id === productId));
+
+      if (!isProductInFavorites) {
+        // If the product is not in the favorite list, add it
+        await addToFavoriteslist(user.id, productId);
+        setListText('Remove from Favorites');
+      } else {
+        await removeFromFavoriteslist(user.id, productId);
+        setListText('Add to Favorites');
+      }
+    } catch (error) {
+      console.error('Error occurred:', error);
+    }
+  };
+
+  const checkFavList = async () => {
+    try {
+      const userFavorites = await getFavoritesList(user.id);
+
+      // Flatten the products array
+      const favProducts = userFavorites.flatMap((category) => category.products);
+
+      // Check if the product is already in the user's favorite list
+      const isProductInFavorites = favProducts.some((product) => product.id === productObj.id);
+
+      if (isProductInFavorites) {
+        setListText('Remove from Favorites');
+      } else {
+        setListText('Add to Favorites');
+      }
+    } catch (error) {
+      console.error('Error fetching favorite list:', error);
+    }
+  };
+
   const productQuantityInOrder = () => {
     if (viewOrderDetails && viewOrderDetails?.products) {
       const orderProduct = viewOrderDetails.products.find((product) => product.id === productObj.id);
@@ -69,7 +112,13 @@ const ProductCard = ({ productObj, onDelete, isAdmin }) => {
   };
 
   useEffect(() => {
+    checkFavList();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, productObj]);
+
+  useEffect(() => {
     getOrder();
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, productObj]);
 
@@ -96,12 +145,16 @@ const ProductCard = ({ productObj, onDelete, isAdmin }) => {
             <p>Price: ${productObj.price}</p>
             <p>Description: {productObj.description}</p>
             <p>Category: {productObj.category?.name}</p>
+            {productObj.quantity > 0 && <p>Quantity: {productObj.quantity}</p>}
             {productQuantityInOrder() > 0 && <p>{productQuantityInOrder()} in order</p>}
           </div>
 
           {isAdmin && (
           <div>
             <div>
+              <button type="button" onClick={() => handleListClick(productObj.id)}>
+                {listText}
+              </button>
               <button type="button" onClick={handleButtonClick}>
                 {buttonText}
               </button>
@@ -141,11 +194,12 @@ ProductCard.propTypes = {
     description: PropTypes.string,
     price: PropTypes.number,
   }).isRequired,
-  isAdmin: PropTypes.bool.isRequired,
+  isAdmin: PropTypes.bool,
   onDelete: PropTypes.func,
 };
 ProductCard.defaultProps = {
   onDelete: null,
+  isAdmin: null,
 };
 
 export default ProductCard;
