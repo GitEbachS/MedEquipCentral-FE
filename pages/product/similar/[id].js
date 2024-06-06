@@ -14,7 +14,7 @@ function AddSimilarItems() {
   const [allProducts, setAllProducts] = useState([]);
   const [singleProduct, setSingleProduct] = useState({});
   const [similarItems, setSimilarItems] = useState([]);
-  const [buttonText, setButtonText] = useState('');
+  const [buttonStates, setButtonStates] = useState({});
 
   const fetchUser = async () => {
     const userData = await getSingleUser(user.id);
@@ -25,45 +25,63 @@ function AddSimilarItems() {
     const all = await getProducts();
     const single = await getSingleProduct(id);
 
-    setAllProducts(all);
+    const similarProductsList = await getSimilarItems(id);
+    const similarProductIds = similarProductsList.map((item) => item.id);
+
+    const filteredProducts = all.filter(
+      (product) => product.id !== single.id && !similarProductIds.includes(product.id),
+    );
+
+    setAllProducts(filteredProducts);
     setSingleProduct(single);
+    setSimilarItems(similarProductsList);
   };
 
-  const similarProductList = () => {
-    getSimilarItems(id).then(setSimilarItems);
+  const similarProductList = async () => {
+    const similarProductsList = await getSimilarItems(id);
+    setSimilarItems(similarProductsList);
+    return similarProductsList;
   };
 
   const checkSimilarItems = async () => {
-    if (id) {
-      const similarray = await getSimilarItems(id);
-      const isSimilarItem = similarray.map((item) => item.id);
+    const similarArray = await getSimilarItems(id);
+    const similarItemIds = similarArray.map((item) => item.id);
+    const newButtonStates = {};
 
-      if (isSimilarItem.includes(id)) {
-        setButtonText('-');
-      } else {
-        setButtonText('+');
-      }
-    }
+    allProducts.forEach((product) => {
+      newButtonStates[product.id] = similarItemIds.includes(product.id) ? '-' : '+';
+    });
+
+    setButtonStates(newButtonStates);
   };
 
   const handleListClick = async (productId) => {
     const similarray = await getSimilarItems(id);
     const isSimilarItem = similarray.map((item) => item.id);
+
     if (!isSimilarItem.includes(productId)) {
       const payload = {
         similarProductId: productId,
       };
-      addSimilarItem(singleProduct.id, user.id, payload).then(() => similarProductList());
-      setButtonText('-');
+      await addSimilarItem(singleProduct.id, user.id, payload);
+      setAllProducts(allProducts.filter((product) => product.id !== productId));
+      setButtonStates((prevState) => ({ ...prevState, [productId]: '-' }));
     } else {
-      deleteSimilarItem(id, productId, user.id).then(() => viewProducts());
-      setButtonText('+');
+      await deleteSimilarItem(id, productId, user.id);
+      const updatedProducts = await getProducts();
+      const similarProductsList = await getSimilarItems(id);
+
+      const similarProductIds = similarProductsList.map((item) => item.id);
+
+      const filteredProducts = updatedProducts.filter(
+        (product) => product.id !== singleProduct.id && !similarProductIds.includes(product.id),
+      );
+
+      setAllProducts(filteredProducts);
+      setButtonStates((prevState) => ({ ...prevState, [productId]: '+' }));
     }
+    await similarProductList();
   };
-  useEffect(() => {
-    similarProductList();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [similarItems]);
 
   useEffect(() => {
     fetchUser();
@@ -71,10 +89,17 @@ function AddSimilarItems() {
   }, [user]);
 
   useEffect(() => {
-    checkSimilarItems();
-    viewProducts();
+    if (id) {
+      viewProducts();
+      similarProductList();
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
+
+  useEffect(() => {
+    checkSimilarItems();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [allProducts]);
 
   return (
     <div>
@@ -97,30 +122,27 @@ function AddSimilarItems() {
         </div>
       </div>
       <div className="similar-container">
-        {similarItems.map((similarProduct) => (
-          <div key={similarProduct.id}>
+        {similarItems.map((similarItem) => (
+          <div key={similarItem.id}>
             <Card className="card-style" style={{ height: '250px' }}>
               <Card.Body>
-
-                <div className="similarProduct-details">
-                  <h2>{similarProduct.name}</h2>
-                  <Image src={similarProduct.image} alt={similarProduct.name} style={{ height: '100px' }} />
-                  <p>Category: {similarProduct.category?.name}</p>
+                <button type="button" onClick={() => handleListClick(similarItem.id)}>-</button>
+                <Image src={similarItem.image} alt={similarItem.name} style={{ height: '100px' }} />
+                <div className="similarItem-details">
+                  <h2>{similarItem.name}</h2>
+                  <p>Category: {similarItem.category?.name}</p>
                 </div>
-
               </Card.Body>
-
             </Card>
-
           </div>
         ))}
       </div>
       <div className="similar-container">
-        {allProducts.map((product) => (
+        {allProducts.filter((product) => product.id !== singleProduct.id).map((product) => (
           <div key={product.id}>
             <Card className="card-style" style={{ height: '250px' }}>
               <Card.Body>
-                <button type="button" onClick={() => handleListClick(product.id)}>{buttonText}</button>
+                <button type="button" onClick={() => handleListClick(product.id)}>{buttonStates[product.id]}</button>
                 <Image src={product.image} alt={product.name} style={{ height: '100px' }} />
 
                 <div className="product-details">

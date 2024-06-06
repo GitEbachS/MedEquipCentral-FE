@@ -23,14 +23,14 @@ const getCartIds = (userId) => new Promise((resolve, reject) => {
       // Include other headers if needed, such as Authorization
     },
   })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+    .then((resp) => {
+      if (resp.ok) {
+        resolve(resp.json());
+      } else {
+        resolve({});
       }
-      return response.json();
     })
-    .then((data) => resolve(data))
-    .catch((error) => reject(error));
+    .catch(reject);
 });
 
 const createOpenOrder = (userId) => new Promise((resolve, reject) => {
