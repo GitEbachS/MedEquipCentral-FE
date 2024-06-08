@@ -33,6 +33,7 @@ export default function ViewOrder() {
         <h3>Order #{orderData.orderId}</h3>
         <p>Total Products: {orderData.totalProducts}</p>
         <p>Total Price: ${orderData.total}</p>
+        <div>{orderData.closeDate ? `Date Closed: ${orderData.closeDate}` : ''}</div>
         <p>Status: {orderData.isClosed ? 'Closed' : 'Open'}</p>
         <div className="order-details">
           <p>Credit Card Number: {orderData.creditCardNumber || 'N/A'}</p>

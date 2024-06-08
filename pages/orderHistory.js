@@ -33,6 +33,8 @@ const OrderHistoryPage = () => {
             <li key={order.id}>
               <div>Order ID: {order.id}</div>
               <div>Total Price: ${order.total}</div>
+              <div>{order.closeDate ? `Date Closed: ${new Date(order.closeDate).toLocaleDateString('en-US')}` : ''}</div>
+
               <div>Status: {order.isClosed ? 'Closed' : 'Open'}</div>
               <Link href={`/order/${order.id}`} passHref>
                 <button type="button">View Order Details</button>

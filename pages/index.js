@@ -116,7 +116,7 @@ function Products() {
         <UserForm onUpdate={onUpdate} />
       ) : (
         <div>
-          <div>
+          <div className="categoryButtons">
             <button type="button" onClick={handleResetProducts}>
               Show All Products
             </button>
@@ -137,14 +137,20 @@ function Products() {
             </Link>
           </div>
           {isCatProductsAvailable && catProducts.length > 0 ? (
-            catProducts.map((category) => (
-              <div key={category.id}>
-                <h2>{category.name}</h2>
-                {category?.products.map((product) => (
-                  <ProductCard key={product.id} productObj={product} isAdmin={isAdmin} onDelete={handleDelete} />
-                ))}
-              </div>
-            ))
+            <div className="general-cards-container">
+              {catProducts.map((category) => (
+                <div key={category.id}>
+                  <h2 className="categeoryLabel">{category.name}</h2>
+                  <div className="grid">
+                    {category?.products.map((product) => (
+                      <div key={product.id} className="card">
+                        <ProductCard productObj={product} isAdmin={isAdmin} onDelete={handleDelete} />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
           ) : (
             <p>No products found</p>
           )}

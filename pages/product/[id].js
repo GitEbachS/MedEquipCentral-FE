@@ -1,10 +1,11 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { Image } from 'react-bootstrap';
+import Link from 'next/link';
 import { getSingleProduct } from '../../api/productData';
-import { getSimilarItems } from '../../api/similarItemData';
 import { useAuth } from '../../utils/context/authContext';
 import { getSingleUser } from '../../api/userData';
+import { getSimilarItems } from '../../api/similarItemData';
 
 export default function ViewProductDetails() {
   const router = useRouter();
@@ -37,8 +38,11 @@ export default function ViewProductDetails() {
 
   return (
     <div key={product.id}>
+      <Link href={`/review/new?productId=${product.id}`} passHref>
+        <button type="button">Add Review</button>
+      </Link>
       <h1>{product.name}</h1>
-      <Image src={product.image} alt={product.name} />
+      <Image src={product.image} alt={product.name} style={{ height: '250px' }} />
       <p>Price: ${product.price}</p>
       <p>Description: {product.description}</p>
       <p>Category: {product.category?.name}</p>
@@ -52,11 +56,24 @@ export default function ViewProductDetails() {
             <div key={review.id}>
               <div>
                 <h3>{review?.user.firstName} {review?.user.lastName}</h3>
-                <Image src={review?.user.image} alt={review.user?.name} />
+                <Image src={review?.user.image} alt={review.user?.name} style={{ borderRadius: '50%', width: 100, height: 100 }} />
               </div>
-              <p>Rating: {review.rating}</p>
-              <p>Rating: {review.dateCreated}</p>
-              <p>{review.commentReview}</p>
+              <div className="reviewHead">
+                <div className="stars-container">
+                  <div className="stars-backdrop">
+                    ★★★★★
+                  </div>
+                  <div className="stars-overlay" style={{ width: `${(review.rating / 5) * 100}%` }}>
+                    ★★★★★
+                  </div>
+                </div>
+                <p style={{ opacity: '50%' }}>Created on {review.dateCreated}</p>
+                <p>{review.commentReview}</p>
+              </div>
+
+              <Link href={`/review/edit/${review.id}`} passHref>
+                <button type="button">Edit Review</button>
+              </Link>
             </div>
           ))
         ) : (
@@ -69,7 +86,7 @@ export default function ViewProductDetails() {
           similarProducts.map((similarProduct) => (
             <div key={similarProduct.id}>
               <h3>{similarProduct.name}</h3>
-              <Image src={similarProduct.image} alt={similarProduct.name} />
+              <Image src={similarProduct.image} alt={similarProduct.name} style={{ height: '250px' }} />
               <h3>{similarProduct.description}</h3>
               <h3>{similarProduct.price}</h3>
               <h3>{similarProduct.category?.name}</h3>

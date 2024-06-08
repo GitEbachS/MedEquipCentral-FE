@@ -42,19 +42,27 @@ export default function Profile() {
       <div>
         {userReviews.length === 0 && ('No reviews found')}
         {!!userReviews.length && (userReviews.map((review) => (
-          <div key={review.id}>
-            <div style={{ width: '100%' }}>
-              <div className="reviewHead">
-                <div className="stars-container">
-                  <div className="stars-backdrop">
-                    ★★★★★
-                  </div>
-                  <div className="stars-overlay" style={{ width: `${(review.rating / 5) * 100}%` }}>
-                    ★★★★★
-                  </div>
+          <div>
+            <h3>Reviews:</h3>
+            <div key={review.id}>
+              <div style={{ width: '100%' }}>
+                <div>
+                  <p>{review.product?.name}</p>
+                  <Image src={review.product?.image} alt="profile" style={{ borderRadius: '30%', width: 100, height: 100 }} />
                 </div>
-                <p style={{ opacity: '50%' }}>By {singleUser.name} on {review.dateCreated}</p>
-                <p>{review.commentReview}</p>
+                <div className="reviewHead">
+                  <div className="stars-container">
+                    <div className="stars-backdrop">
+                      ★★★★★
+                    </div>
+                    <div className="stars-overlay" style={{ width: `${(review.rating / 5) * 100}%` }}>
+                      ★★★★★
+                    </div>
+                  </div>
+                  <p style={{ opacity: '50%' }}>Created on {review.dateCreated}</p>
+                  <p>{review.commentReview}</p>
+                </div>
+
               </div>
             </div>
           </div>

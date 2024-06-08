@@ -133,14 +133,19 @@ const ProductCard = ({ productObj, onDelete, isAdmin }) => {
   }, [productArray]);
 
   return (
-    <div>
-      <Card className="card-style" style={{ height: '450px' }}>
+    <>
+      <Card className="card">
         <Card.Body>
+          <div>
+            <button type="button" size="sm" onClick={() => onDelete(productObj.id)} className="deleteBtn m-2">
+              Delete
+            </button>
+          </div>
           <Link href={`/product/${productObj.id}`} passHref>
-            <Image src={productObj.image} alt={productObj.name} style={{ height: '100px' }} />
+            <Image src={productObj.image} alt={productObj.name} className="productImage" />
           </Link>
 
-          <div className="product-details">
+          <div className="productDetails">
             <h2>{productObj.name}</h2>
             <p>Price: ${productObj.price}</p>
             <p>Description: {productObj.description}</p>
@@ -151,7 +156,8 @@ const ProductCard = ({ productObj, onDelete, isAdmin }) => {
 
           {isAdmin && (
           <div>
-            <div>
+            <div className="adminActions">
+
               <button type="button" onClick={() => handleListClick(productObj.id)}>
                 {listText}
               </button>
@@ -163,11 +169,7 @@ const ProductCard = ({ productObj, onDelete, isAdmin }) => {
                 <button type="button">Edit Product</button>
               </Link>
             </div>
-            <div>
-              <button type="button" size="sm" onClick={() => onDelete(productObj.id)} className="deleteBtn m-2">
-                DELETE
-              </button>
-            </div>
+
           </div>
 
           )}
@@ -176,7 +178,7 @@ const ProductCard = ({ productObj, onDelete, isAdmin }) => {
 
       </Card>
 
-    </div>
+    </>
   );
 };
 
