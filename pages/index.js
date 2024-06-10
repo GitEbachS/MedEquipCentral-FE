@@ -111,11 +111,18 @@ function Products() {
 
   return (
     <>
-      {currentUser == null ? (<h1>Create an Account</h1>) : (<h1>Products by Category</h1>)}
+      {currentUser == null ? (<h1>Create an Account</h1>) : (
+        <div className="title-container"><h1>Products by Category</h1>
+          <Link href="/product/new" passHref>
+            <button className="create-product-btn" type="button">Create Product</button>
+          </Link>
+        </div>
+      )}
       {currentUser === null ? (
         <UserForm onUpdate={onUpdate} />
       ) : (
-        <div>
+        <div className="index-container">
+
           <div className="categoryButtons">
             <button type="button" onClick={handleResetProducts}>
               Show All Products
@@ -125,17 +132,13 @@ function Products() {
                 type="button"
                 key={category.id}
                 onClick={() => handleCategoryFilter(category.name)}
-                disabled={selectedCategory === category.name}
+                className={selectedCategory === category.name ? 'selected' : 'button'}
               >
                 {category.name}
               </button>
             ))}
           </div>
-          <div>
-            <Link href="/product/new" passHref>
-              <button type="button">Create Product</button>
-            </Link>
-          </div>
+
           {isCatProductsAvailable && catProducts.length > 0 ? (
             <div className="general-cards-container">
               {catProducts.map((category) => (

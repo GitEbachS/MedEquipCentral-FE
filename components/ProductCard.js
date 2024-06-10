@@ -6,6 +6,7 @@ import { Image } from 'react-bootstrap';
 import { addProductToOrder, deleteProductFromOrder } from '../api/orderProductData';
 import { getCartIds, getSingleOrderDetails } from '../api/orderData';
 import { useAuth } from '../utils/context/authContext';
+
 import { addToFavoriteslist, getFavoritesList, removeFromFavoriteslist } from '../api/favoritesListData';
 
 const ProductCard = ({ productObj, onDelete, isAdmin }) => {
@@ -135,46 +136,45 @@ const ProductCard = ({ productObj, onDelete, isAdmin }) => {
   return (
     <>
       <Card className="card">
-        <Card.Body>
-          <div>
-            <button type="button" size="sm" onClick={() => onDelete(productObj.id)} className="deleteBtn m-2">
-              Delete
-            </button>
-          </div>
-          <Link href={`/product/${productObj.id}`} passHref>
-            <Image src={productObj.image} alt={productObj.name} className="productImage" />
-          </Link>
 
-          <div className="productDetails">
-            <h2>{productObj.name}</h2>
-            <p>Price: ${productObj.price}</p>
-            <p>Description: {productObj.description}</p>
-            <p>Category: {productObj.category?.name}</p>
-            {productObj.quantity > 0 && <p>Quantity: {productObj.quantity}</p>}
-            {productQuantityInOrder() > 0 && <p>{productQuantityInOrder()} in order</p>}
-          </div>
-
+        <div>
           {isAdmin && (
-          <div>
             <div className="adminActions">
-
-              <button type="button" onClick={() => handleListClick(productObj.id)}>
-                {listText}
+              <button type="button" size="sm" onClick={() => onDelete(productObj.id)} className="deleteBtn m-2">
+                Delete
               </button>
-              <button type="button" onClick={handleButtonClick}>
-                {buttonText}
-              </button>
-
               <Link href={`/product/edit/${productObj.id}`} passHref>
-                <button type="button">Edit Product</button>
+                <button type="button">Edit</button>
               </Link>
             </div>
+          )}
+        </div>
+        <Link href={`/product/${productObj.id}`} passHref>
+          <Image src={productObj.image} alt={productObj.name} className="productImage" />
+        </Link>
+        <h2>{productObj.name}</h2>
+        <div className="productDetails">
+
+          <p>Price: ${productObj.price}</p>
+          {/* <p>Description: {productObj.description}</p>
+            <p>Category: {productObj.category?.name}</p> */}
+          {productObj.quantity > 0 && <p>Quantity: {productObj.quantity}</p>}
+          {productQuantityInOrder() > 0 && <p>&nbsp; |  &nbsp;{productQuantityInOrder()} in order</p>}
+        </div>
+
+        <div>
+          <div className="card-btnActions">
+
+            <button type="button" onClick={() => handleListClick(productObj.id)}>
+              {listText}
+            </button>
+            <button type="button" onClick={handleButtonClick}>
+              {buttonText}
+            </button>
 
           </div>
 
-          )}
-
-        </Card.Body>
+        </div>
 
       </Card>
 
