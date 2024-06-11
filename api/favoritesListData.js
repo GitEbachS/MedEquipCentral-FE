@@ -28,7 +28,7 @@ const addToFavoriteslist = (userId, productId) => new Promise((resolve, reject) 
     },
     // body: JSON.stringify(payload),
   })
-    .then((response) => response.json())
+    // .then((response) => response.json())
     .then((data) => resolve(data))
     .catch(reject);
 });
@@ -40,7 +40,7 @@ const removeFromFavoriteslist = (userId, productId) => new Promise((resolve, rej
       'Content-Type': 'application/json',
     },
   })
-    .then((response) => response.json())
+    // .then((response) => response.json())
     .then(resolve)
     .catch(reject);
 });

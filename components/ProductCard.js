@@ -7,11 +7,16 @@ import { addProductToOrder, deleteProductFromOrder } from '../api/orderProductDa
 import { getCartIds, getSingleOrderDetails } from '../api/orderData';
 import { useAuth } from '../utils/context/authContext';
 
-const ProductCard = ({ productObj, onDelete, isAdmin }) => {
+import { addToFavoriteslist, getFavoritesList, removeFromFavoriteslist } from '../api/favoritesListData';
+
+const ProductCard = ({
+  productObj, onDelete, isAdmin,
+}) => {
   const { user } = useAuth();
   const [cart, setCart] = useState({});
   const [viewOrderDetails, setViewOrderDetails] = useState({});
   const [productArray, setProductArray] = useState([]);
+  const [listText, setListText] = useState('');
   const [buttonText, setButtonText] = useState('');
 
   const getOrder = async () => {
@@ -60,6 +65,47 @@ const ProductCard = ({ productObj, onDelete, isAdmin }) => {
     }
   };
 
+  const handleListClick = async (productId) => {
+    try {
+      // Get the user's favorite list
+      const userFavorites = await getFavoritesList(user.id);
+
+      // Check if the product is already in the user's favorite list
+      const isProductInFavorites = userFavorites.some((category) => category.products.some((product) => product.id === productId));
+
+      if (!isProductInFavorites) {
+        // If the product is not in the favorite list, add it
+        await addToFavoriteslist(user.id, productId);
+        setListText('Remove from Favorites');
+      } else {
+        await removeFromFavoriteslist(user.id, productId);
+        setListText('Add to Favorites');
+      }
+    } catch (error) {
+      console.error('Error occurred:', error);
+    }
+  };
+
+  const checkFavList = async () => {
+    try {
+      const userFavorites = await getFavoritesList(user.id);
+
+      // Flatten the products array
+      const favProducts = userFavorites.flatMap((category) => category.products);
+
+      // Check if the product is already in the user's favorite list
+      const isProductInFavorites = favProducts.some((product) => product.id === productObj.id);
+
+      if (isProductInFavorites) {
+        setListText('Remove from Favorites');
+      } else {
+        setListText('Add to Favorites');
+      }
+    } catch (error) {
+      console.error('Error fetching favorite list:', error);
+    }
+  };
+
   const productQuantityInOrder = () => {
     if (viewOrderDetails && viewOrderDetails?.products) {
       const orderProduct = viewOrderDetails.products.find((product) => product.id === productObj.id);
@@ -69,7 +115,13 @@ const ProductCard = ({ productObj, onDelete, isAdmin }) => {
   };
 
   useEffect(() => {
+    checkFavList();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, productObj]);
+
+  useEffect(() => {
     getOrder();
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, productObj]);
 
@@ -84,46 +136,51 @@ const ProductCard = ({ productObj, onDelete, isAdmin }) => {
   }, [productArray]);
 
   return (
-    <div>
-      <Card className="card-style" style={{ height: '450px' }}>
-        <Card.Body>
-          <Link href={`/product/${productObj.id}`} passHref>
-            <Image src={productObj.image} alt={productObj.name} style={{ height: '100px' }} />
-          </Link>
+    <>
+      <Card className="card">
 
-          <div className="product-details">
-            <h2>{productObj.name}</h2>
-            <p>Price: ${productObj.price}</p>
-            <p>Description: {productObj.description}</p>
-            <p>Category: {productObj.category?.name}</p>
-            {productQuantityInOrder() > 0 && <p>{productQuantityInOrder()} in order</p>}
-          </div>
-
+        <div>
           {isAdmin && (
-          <div>
-            <div>
-              <button type="button" onClick={handleButtonClick}>
-                {buttonText}
+            <div className="adminActions">
+              <button type="button" size="sm" onClick={() => onDelete(productObj.id)} className="deleteBtn m-2">
+                Delete
               </button>
-
               <Link href={`/product/edit/${productObj.id}`} passHref>
-                <button type="button">Edit Product</button>
+                <button type="button">Edit</button>
               </Link>
             </div>
-            <div>
-              <button type="button" size="sm" onClick={() => onDelete(productObj.id)} className="deleteBtn m-2">
-                DELETE
-              </button>
-            </div>
+          )}
+        </div>
+        <Link href={`/product/${productObj.id}`} passHref>
+          <Image src={productObj.image} alt={productObj.name} className="productImage" />
+        </Link>
+        <h2>{productObj.name}</h2>
+        <div className="productDetails">
+
+          <p>Price: ${productObj.price}</p>
+          {/* <p>Description: {productObj.description}</p>
+            <p>Category: {productObj.category?.name}</p> */}
+          {/* {productObj.quantity > 0 && <p>Quantity: {productObj.quantity}</p>} */}
+          {productQuantityInOrder() > 0 && <p>&nbsp; |  &nbsp;{productQuantityInOrder()} in order</p>}
+        </div>
+
+        <div>
+          <div className="card-btnActions">
+
+            <button type="button" onClick={() => handleListClick(productObj.id)}>
+              {listText}
+            </button>
+            <button type="button" onClick={handleButtonClick}>
+              {buttonText}
+            </button>
+
           </div>
 
-          )}
-
-        </Card.Body>
+        </div>
 
       </Card>
 
-    </div>
+    </>
   );
 };
 
@@ -141,11 +198,12 @@ ProductCard.propTypes = {
     description: PropTypes.string,
     price: PropTypes.number,
   }).isRequired,
-  isAdmin: PropTypes.bool.isRequired,
+  isAdmin: PropTypes.bool,
   onDelete: PropTypes.func,
 };
 ProductCard.defaultProps = {
   onDelete: null,
+  isAdmin: null,
 };
 
 export default ProductCard;

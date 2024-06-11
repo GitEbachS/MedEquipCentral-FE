@@ -1,4 +1,6 @@
 @import 'bootstrap/dist/css/bootstrap.css';
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+
 
 html,
 body {
@@ -18,9 +20,42 @@ a {
 }
 
 body {
-  background-color: #88effd;
+  background-color: rgb(250, 250, 237);
 }
 
+/* NavBar */
+.navBar {
+  background-color: rgb(116, 240, 240);
+}
+
+.navHover:hover {
+  background-color: #527972;
+  color: white;
+}
+
+.navBar .nav {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.navBar .signOutBtn {
+  position: absolute;
+  bottom: 10px;
+  right: 20px;
+  height: 40px;
+  width: 80px;
+  color: grey;
+  border: 2px solid grey;
+  border-radius: 5px;
+}
+
+.navBar .signOutBtn:hover {
+  background-color: rgb(212, 209, 209);
+}
+
+/* Cards */
 .user-card {
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -84,4 +119,333 @@ body {
 
 .review-card-btn {
   padding: 4px 8px;
+}
+.similar-container{
+  margin-top: 100px;
+}
+
+/* Styles for the star rating component */
+.star {
+  cursor: pointer;
+  font-size: 1.5rem;
+  color: #d3d3d3;
+}
+
+.star.filled {
+  color: #f39c12;
+}
+
+
+.card {
+  width: 100%;
+  max-width: 400px;
+  height: 100%;
+  padding: 0px;
+  box-shadow: 0 4px 8px #b3e5fc;
+  background-color: #f5f5f5;
+    h2{
+      width: 100%;
+      margin-top: 5px;
+      margin-left: 5px;
+      font-family: Verdana, sans-serif;
+      color: rgb(78, 77, 77);
+    }
+}
+
+.productImage {
+  width: 100%;
+  height: 200px; 
+  object-fit: cover; /* Ensure the image covers the entire space */
+}
+
+.productImage:hover {
+  opacity: 0.8; /* Lower opacity on hover */
+}
+
+.productDetails {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-bottom: 40px;
+  margin-left: 5px;
+}
+
+.card-btnActions {
+  position: absolute; 
+  bottom: 10px; 
+  left: 10px; 
+  right: 10px; 
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-btnActions button{
+  height: 40px; 
+  width: 100px;
+  padding: 0px;
+  margin-left: 3px;
+  margin-right: 3px;
+  font-family: Geneva;
+  background-color: #e9d4e9;
+  color: rgb(105, 102, 105);
+  border-radius: 16px;
+  border: 1px solid #d77bf3;
+  font-size: 12px;
+}
+
+.card-btnActions button:hover {
+  color: rgb(208, 209, 205);
+  background-color: #d77bf3;
+}
+
+/* index page */
+.title-container {
+  position: relative;
+  margin: 30px;
+    h1 {
+      font-family: "Playfair Display";
+      font-weight: 600;
+      color: rgb(88, 85, 85);
+    }
+    
+}
+
+.create-product-btn {
+  position: absolute;
+  right: 10px;
+  top: 7px;
+  color: grey;
+  border: 2px solid grey;
+  border-radius: 5px;
+}
+
+.create-product-btn:hover {
+  color: grey;
+  border: 2px solid rgb(168, 165, 165);
+}
+.categoryButtons {
+  display: grid;
+  margin: 30px 50px;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px;
+}
+
+.categoryButtons button {
+  border: none;
+  background-color: #d77bf3; 
+  border-radius: 50%; 
+  color: rgb(78, 76, 76);
+  width: 85px; 
+  height: 85px; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.categoryButtons button:hover {
+  width: 90px; 
+  height: 90px;  
+  color: rgb(223, 221, 210);
+  border: 2px solid rgb(88, 87, 87);
+}
+
+.categoryButtons button.selected {
+  color: #fff;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+}
+
+.categeoryLabel {
+  width: 100%;
+  margin: 50px auto 20px auto;
+  padding: 3px;
+  font-family: fantasy;
+  text-align: center;
+  border-top: 2px solid #da8df1;
+  background: linear-gradient(45deg, #4dcc03, #e7ee8d); 
+  color: rgb(87, 86, 86);
+}
+
+/* Forms */
+Form {
+  margin-top: 20px;
+  h2 {
+    font-family:'Courier New', Courier, monospace;
+    font-size: 45px;
+    margin-bottom: 20px;
+  }
+  label {
+    color: rgb(78, 77, 77);
+    font-size: 20px;
+  }
+  button {
+    font-family: monospace;
+    font-size: 20px;
+    background: linear-gradient(45deg, #0dbeeb, #ffc75f); 
+    color: white;
+    border-radius: 20px;
+    border: 2px solid rgb(5, 121, 175);
+  }
+  .form-control, .form-select {
+    border: 2px solid rgb(89, 186, 216);
+  }
+ 
+}
+
+/* Favorites List Page */
+.favGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+.cat-title {
+  border: 2px solid rgb(247, 209, 140);
+  background-color: rgb(247, 209, 140);
+  border-radius: 4px;
+  text-align: center;
+  color: rgb(80, 78, 78);
+  font-family: fantasy;
+}
+
+/* Cart Page */
+.order-container {
+  display: flex;
+  margin: 30px auto;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 20px;
+  /* General table styling */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-size: 18px;
+      text-align: left;
+    }
+
+      /* Table header styling */
+      th, td {
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+      }
+
+      /* Table row striping */
+      tr:nth-of-type(even) {
+        background-color: #f3f3f3;
+      }
+
+      /* Table header background color */
+      thead tr {
+        background-color: #c773e0;
+        color: #ffffff;
+      }
+
+      /* Table border and box shadow */
+      table {
+        border: 1px solid #ddd;
+        box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+      }
+}
+
+.product-list {
+  margin: 50px 150px 50px 100px;
+  h2:first-child {
+    font-size: 35px;
+    font-family:  sans-serif;
+    /* background-color: rgb(136, 224, 85); */
+    border-bottom: 4px solid #ddd;
+    width: 100%;
+    margin-left: 5px;
+  }
+}
+
+.product-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin: 20px;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 20px; 
+}
+
+.product-item:last-child {
+  border-bottom: none; /* Remove border from the last product item */
+}
+
+input[type="number"] {
+  width: 60px;
+}
+
+
+/* Order History Page */
+.history-btnActions {
+  height: 40px; 
+  width: 100px;
+  padding: 0px;
+  margin-left: 3px;
+  margin-right: 3px;
+  font-family: Geneva;
+  color: rgb(208, 209, 205);
+  background-color: #d77bf3;
+  border-radius: 16px;
+  border: 1px solid #d77bf3;
+  font-size: 12px;
+}
+
+.chartGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+}
+
+/* CSS for Order Summary */
+.order-summary {
+  margin-top: 50px; /* Add space between product list and order summary */
+  padding: 20px;
+  border: 2px solid #ccc; /* Increase border thickness */
+  border-radius: 8px; /* Increase border radius for smoother edges */
+  background-color: #f9f9f9;
+  font-family: Geneva; /* Set the font family */
+}
+
+.order-summary table {
+  width: 100%; /* Make the table fill the entire width of its container */
+  border-collapse: collapse; /* Collapse the borders between table cells */
+}
+
+.order-summary th,
+.order-summary td {
+  padding: 10px; /* Increase padding to add space between content and border */
+  border-bottom: 2px solid #ddd; /* Increase thickness of bottom border */
+}
+
+.order-summary th {
+  background-color: #f2f2f2; /* Set background color for table header */
+  text-align: left; /* Align table header text to the left */
+}
+
+/* Styling for Checkout Button */
+.checkout-button {
+  margin-top: 20px; 
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #4dcc03;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.checkout-button:hover {
+  background-color: #47a902; /* Darken the background color on hover */
 }

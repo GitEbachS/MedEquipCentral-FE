@@ -6,41 +6,40 @@ import {
   Nav,
 } from 'react-bootstrap';
 import { signOut } from '../utils/auth';
-import { useAuth } from '../utils/context/authContext';
 
 export default function NavBar() {
-  const { user } = useAuth();
   return (
-    <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+    <Navbar className="navBar" collapseOnSelect expand="lg">
       <Container>
         <Link passHref href="/">
-          <Navbar.Brand>CHANGE ME</Navbar.Brand>
+          <Navbar.Brand>MedEquipCentral</Navbar.Brand>
         </Link>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
-            {/* CLOSE NAVBAR ON LINK SELECTION: https://stackoverflow.com/questions/72813635/collapse-on-select-react-bootstrap-navbar-with-nextjs-not-working */}
             <Link passHref href="/">
-              <Nav.Link>Home</Nav.Link>
+              <Nav.Link className="navHover">Home</Nav.Link>
             </Link>
             <Link passHref href="/favoritesList">
-              <Nav.Link>Favorites List</Nav.Link>
+              <Nav.Link className="navHover">Favorites List</Nav.Link>
             </Link>
-            <Link passHref href={`/order/${user.id}`}>
-              <Nav.Link>Cart</Nav.Link>
+            <Link passHref href="/cart">
+              <Nav.Link className="navHover">Cart</Nav.Link>
             </Link>
             <Link passHref href="/orderHistory">
-              <Nav.Link>Order History</Nav.Link>
+              <Nav.Link className="navHover">Order History</Nav.Link>
             </Link>
             <Link passHref href="/profile">
-              <Nav.Link>Profile</Nav.Link>
+              <Nav.Link className="navHover">Profile</Nav.Link>
+            </Link>
+            <Link passHref href="/similarItems">
+              <Nav.Link className="navHover">Similar Items</Nav.Link>
             </Link>
             <Nav>
-              <button type="button" onClick={signOut}>
+              <button className="signOutBtn" type="button" onClick={signOut}>
                 Sign Out
               </button>
             </Nav>
-
           </Nav>
         </Navbar.Collapse>
       </Container>

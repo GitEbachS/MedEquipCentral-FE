@@ -10,7 +10,7 @@ const createReview = (payload) => new Promise((resolve, reject) => {
     },
     body: JSON.stringify(payload),
   })
-    .then((response) => response.json())
+    // .then((response) => response.json())
     .then((data) => resolve(data))
     .catch(reject);
 });
@@ -23,6 +23,18 @@ const updateReview = (reviewId, payload) => new Promise((resolve, reject) => {
     },
     body: JSON.stringify(payload),
   })
+    .then((data) => resolve(data))
+    .catch(reject);
+});
+
+const getSingleReview = (reviewId) => new Promise((resolve, reject) => {
+  fetch(`${endpoint}/singleReview/${reviewId}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((response) => response.json())
     .then((data) => resolve(data))
     .catch(reject);
 });
@@ -46,7 +58,7 @@ const getReviewsByUserId = (userId) => new Promise((resolve, reject) => {
       'Content-Type': 'application/json',
     },
   })
-    // .then((response) => response.json())
+    .then((response) => response.json())
     .then((data) => {
       if (data) {
         resolve(Object.values(data));
@@ -57,5 +69,5 @@ const getReviewsByUserId = (userId) => new Promise((resolve, reject) => {
     .catch(reject);
 });
 export {
-  deleteReview, updateReview, createReview, getReviewsByUserId,
+  deleteReview, updateReview, createReview, getReviewsByUserId, getSingleReview,
 };

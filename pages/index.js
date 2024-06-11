@@ -111,12 +111,19 @@ function Products() {
 
   return (
     <>
-      {currentUser == null ? (<h1>Create an Account</h1>) : (<h1>Products by Category</h1>)}
+      {currentUser == null ? (<h1>Create an Account</h1>) : (
+        <div className="title-container"><h1>Products by Category</h1>
+          <Link href="/product/new" passHref>
+            <button className="create-product-btn" type="button">Create Product</button>
+          </Link>
+        </div>
+      )}
       {currentUser === null ? (
         <UserForm onUpdate={onUpdate} />
       ) : (
-        <div>
-          <div>
+        <div className="index-container">
+
+          <div className="categoryButtons">
             <button type="button" onClick={handleResetProducts}>
               Show All Products
             </button>
@@ -125,26 +132,28 @@ function Products() {
                 type="button"
                 key={category.id}
                 onClick={() => handleCategoryFilter(category.name)}
-                disabled={selectedCategory === category.name}
+                className={selectedCategory === category.name ? 'selected' : 'button'}
               >
                 {category.name}
               </button>
             ))}
           </div>
-          <div>
-            <Link href="/product/new" passHref>
-              <button type="button">Create Product</button>
-            </Link>
-          </div>
+
           {isCatProductsAvailable && catProducts.length > 0 ? (
-            catProducts.map((category) => (
-              <div key={category.id}>
-                <h2>{category.name}</h2>
-                {category?.products.map((product) => (
-                  <ProductCard key={product.id} productObj={product} isAdmin={isAdmin} onDelete={handleDelete} />
-                ))}
-              </div>
-            ))
+            <div className="general-cards-container">
+              {catProducts.map((category) => (
+                <div key={category.id}>
+                  <h2 className="categeoryLabel">{category.name}</h2>
+                  <div className="grid">
+                    {category?.products.map((product) => (
+                      <div key={product.id} className="card">
+                        <ProductCard productObj={product} isAdmin={isAdmin} onDelete={handleDelete} />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
           ) : (
             <p>No products found</p>
           )}

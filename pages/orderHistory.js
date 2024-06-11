@@ -23,24 +23,29 @@ const OrderHistoryPage = () => {
   const handleReorder = (orderId) => orderId;
 
   return (
-    <div>
+    <div className="title-container">
       <h1>Order History</h1>
       {orders.length === 0 ? (
         <p>No orders found.</p>
       ) : (
-        <ul>
+        <div>
           {orders.map((order) => (
-            <li key={order.id}>
+            <div key={order.id}>
               <div>Order ID: {order.id}</div>
               <div>Total Price: ${order.total}</div>
+              <div>{order.closeDate ? `Date Closed: ${new Date(order.closeDate).toLocaleDateString('en-US')}` : ''}</div>
+
               <div>Status: {order.isClosed ? 'Closed' : 'Open'}</div>
-              <Link href={`/order/${user.id}`} passHref>
-                <button type="button">View Details</button>
-              </Link>
-              <button type="button" onClick={() => handleReorder(order.id)}>Reorder</button>
-            </li>
+              <div className="history-btnActions">
+                <Link href={`/order/${order.id}`} passHref>
+                  <button type="button">View Order Details</button>
+                </Link>
+                <button type="button" onClick={() => handleReorder(order.id)}>Reorder</button>
+              </div>
+
+            </div>
           ))}
-        </ul>
+        </div>
       )}
     </div>
   );

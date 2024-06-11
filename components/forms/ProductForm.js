@@ -46,8 +46,8 @@ const ProductForm = ({ productObj }) => {
   }, [productObj]);
 
   return (
-    <Form onSubmit={handleSubmit}>
-      <h2 className="text-white mt-5">{productObj.id ? 'Update' : 'Create'} Product</h2>
+    <Form className="form" onSubmit={handleSubmit}>
+      <h2>{productObj.id ? 'Update' : 'Create'} Product</h2>
 
       <Form.Group className="mb-3">
         <Form.Control
@@ -72,6 +72,7 @@ const ProductForm = ({ productObj }) => {
       </Form.Group>
 
       <Form.Group className="mb-3">
+        <Form.Label>Price:</Form.Label>
         <Form.Control
           type="number"
           name="price"

@@ -23,14 +23,14 @@ const getCartIds = (userId) => new Promise((resolve, reject) => {
       // Include other headers if needed, such as Authorization
     },
   })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+    .then((resp) => {
+      if (resp.ok) {
+        resolve(resp.json());
+      } else {
+        resolve({});
       }
-      return response.json();
     })
-    .then((data) => resolve(data))
-    .catch((error) => reject(error));
+    .catch(reject);
 });
 
 const createOpenOrder = (userId) => new Promise((resolve, reject) => {
@@ -70,6 +70,18 @@ const getSingleOrderDetails = (userId, orderId) => new Promise((resolve, reject)
     .catch(reject);
 });
 
+const getSingleOrderHistory = (userId, orderId) => new Promise((resolve, reject) => {
+  fetch(`${endpoint}/orders/${userId}/single/${orderId}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => resolve(data))
+    .catch(reject);
+});
+
 const getOrderHistory = (userId) => new Promise((resolve, reject) => {
   fetch(`${endpoint}/orderHistory/${userId}`, {
     method: 'GET',
@@ -89,5 +101,5 @@ const getOrderHistory = (userId) => new Promise((resolve, reject) => {
 });
 
 export {
-  getOrderTotal, getOrderHistory, closeOrder, createOpenOrder, getCartIds, getSingleOrderDetails,
+  getOrderTotal, getOrderHistory, closeOrder, createOpenOrder, getCartIds, getSingleOrderDetails, getSingleOrderHistory,
 };
