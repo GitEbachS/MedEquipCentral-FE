@@ -35,17 +35,15 @@ export default function ReviewForm({ reviewObj }) {
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     try {
       if (reviewObj?.id) {
-        await updateReview(reviewObj.id, reviewData);
-        router.push(`/product/${productId}`);
+        updateReview(reviewObj.id, reviewData).then(() => router.push(`/product/${reviewObj.product?.id}`));
       } else {
         const newReviewData = { ...reviewData, productId, userId: user.id };
-        await createReview(newReviewData);
+        createReview(newReviewData).then(() => router.push(`/product/${productId}`));
       }
-      router.push(`/product/${reviewObj.product?.id}`);
     } catch (error) {
       console.error('Failed to submit review:', error);
     }

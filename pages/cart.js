@@ -20,16 +20,17 @@ export default function Cart() {
     return cartData;
   };
 
-  const fetchOrderDetails = async (orderId) => {
-    const orderDetails = await getSingleOrderDetails(user.id, orderId);
-    setOrderData(orderDetails);
-  };
-
   const calculateTotals = (products) => {
     const totalQty = products.reduce((acc, product) => acc + product.quantity, 0);
     const priceTotal = products.reduce((acc, product) => acc + product.quantity * product.price, 0);
     setTotalProducts(totalQty);
     setTotalPrice(priceTotal.toFixed(2));
+  };
+
+  const fetchOrderDetails = async (orderId) => {
+    const orderDetails = await getSingleOrderDetails(user.id, orderId);
+    setOrderData(orderDetails);
+    calculateTotals(orderDetails.products); // Calculate totals after setting order data
   };
 
   const handleQuantityChange = async (productid, newQuantity) => {
@@ -67,34 +68,52 @@ export default function Cart() {
   }, [user]);
 
   return (
-    <div>
+    <div className="title-container">
       <h1>Order Details</h1>
       <div>
         {orderData.user && (
-          <div key={orderData.user?.id} className="user-container">
-            <Image src={orderData.user?.image} className="userImageReview" alt="User profile" />
-            <p>{orderData.user?.firstName} {orderData.user?.lastName}</p>
+          <div key={orderData.user?.id} className="order-container">
+            <div>
+              <Image src={orderData.user?.image} className="userImageReview" alt="User profile" />
+              <p>{orderData.user?.firstName} {orderData.user?.lastName}</p>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>Order ID</th>
+                  <th>Total Products</th>
+                  <th>Total Price</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>#{cart.orderId}</td>
+                  <td>{totalProducts}</td>
+                  <td>${totalPrice}</td>
+                  <td>{orderData.isClosed ? 'Closed' : 'Open'}</td>
+                </tr>
+              </tbody>
+            </table>
+
           </div>
         )}
-        <h3>Order #{cart.orderId}</h3>
-        <p>Total Products: {totalProducts}</p>
-        <p>Total Price: ${totalPrice}</p>
-        <p>Status: {orderData.isClosed ? 'Closed' : 'Open'}</p>
+        {!orderData.products && <p>No products in the order, yet!</p> }
+        <div className="product-list">
+          {orderData.products && orderData.products.map((product) => (
+            <div>
+              <ProductCard key={product.id} productObj={product} />
+              <input
+                key={`${product.id}-input`}
+                type="number"
+                value={product.quantity}
+                onChange={(e) => handleQuantityChange(product.id, parseInt(e.target.value, 10))}
+                min="1"
+              />
 
-        {orderData.products && orderData.products.map((product) => (
-          <div>
-            <ProductCard key={product.id} productObj={product} />
-            <input
-              key={`${product.id}-input`}
-              type="number"
-              value={product.quantity}
-              onChange={(e) => handleQuantityChange(product.id, parseInt(e.target.value, 10))}
-              min="1"
-
-            />
-
-          </div>
-        ))}
+            </div>
+          ))}
+        </div>
 
         <h3>Order Summary</h3>
         <p>Total Products: {totalProducts}</p>

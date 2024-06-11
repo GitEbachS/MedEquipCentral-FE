@@ -14,7 +14,7 @@ const FavoritesProductCard = ({ productObj, onUpdate }) => {
 
   return (
     <div>
-      <Card className="card-style" style={{ height: '450px' }}>
+      <Card className="card">
         <Card.Body>
           <Link href={`/product/${productObj.id}`} passHref>
             <Image src={productObj.image} alt={productObj.name} style={{ height: '100px' }} />
@@ -24,7 +24,6 @@ const FavoritesProductCard = ({ productObj, onUpdate }) => {
             <h2>{productObj.name}</h2>
             <p>Price: ${productObj.price}</p>
             <p>Description: {productObj.description}</p>
-            <p>Category: {productObj.category}</p>
           </div>
 
           <div>

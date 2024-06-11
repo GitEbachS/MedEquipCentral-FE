@@ -18,15 +18,22 @@ export default function FavoritesList() {
 
   return (
     <div>
+      <div className="title-container">
+        <h1>Favorites List</h1>
+      </div>
       {!favList.length ? <h2>Nothing has been added to your Favorites List</h2> : null}
+
       {favList && favList.map((category) => (
         <div key={category.category}>
-          <h3>{category.category}</h3>
-          {category.products.map((product) => (
-            <FavoritesProductCard key={product.id} productObj={product} onUpdate={viewList} />
-          ))}
+          <h3 className="cat-title">{category.category}</h3>
+          <div className="favGrid">
+            {category.products.map((product) => (
+              <FavoritesProductCard key={product.id} productObj={product} onUpdate={viewList} />
+            ))}
+          </div>
         </div>
       ))}
     </div>
+
   );
 }
