@@ -138,6 +138,7 @@ body {
 
 .card {
   width: 100%;
+  max-width: 400px;
   height: 100%;
   padding: 0px;
   box-shadow: 0 4px 8px #b3e5fc;
@@ -257,7 +258,7 @@ body {
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: 30px;
 }
 
@@ -353,11 +354,37 @@ Form {
         border: 1px solid #ddd;
         box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
       }
-      .product-list {
-
-      }
-
 }
+
+.product-list {
+  margin: 50px 150px 50px 100px;
+  h2:first-child {
+    font-size: 35px;
+    font-family:  sans-serif;
+    /* background-color: rgb(136, 224, 85); */
+    border-bottom: 4px solid #ddd;
+    width: 100%;
+    margin-left: 5px;
+  }
+}
+
+.product-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin: 20px;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 20px; 
+}
+
+.product-item:last-child {
+  border-bottom: none; /* Remove border from the last product item */
+}
+
+input[type="number"] {
+  width: 60px;
+}
+
 
 /* Order History Page */
 .history-btnActions {
@@ -372,4 +399,53 @@ Form {
   border-radius: 16px;
   border: 1px solid #d77bf3;
   font-size: 12px;
+}
+
+.chartGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+}
+
+/* CSS for Order Summary */
+.order-summary {
+  margin-top: 50px; /* Add space between product list and order summary */
+  padding: 20px;
+  border: 2px solid #ccc; /* Increase border thickness */
+  border-radius: 8px; /* Increase border radius for smoother edges */
+  background-color: #f9f9f9;
+  font-family: Geneva; /* Set the font family */
+}
+
+.order-summary table {
+  width: 100%; /* Make the table fill the entire width of its container */
+  border-collapse: collapse; /* Collapse the borders between table cells */
+}
+
+.order-summary th,
+.order-summary td {
+  padding: 10px; /* Increase padding to add space between content and border */
+  border-bottom: 2px solid #ddd; /* Increase thickness of bottom border */
+}
+
+.order-summary th {
+  background-color: #f2f2f2; /* Set background color for table header */
+  text-align: left; /* Align table header text to the left */
+}
+
+/* Styling for Checkout Button */
+.checkout-button {
+  margin-top: 20px; 
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #4dcc03;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.checkout-button:hover {
+  background-color: #47a902; /* Darken the background color on hover */
 }

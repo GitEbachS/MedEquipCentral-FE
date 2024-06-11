@@ -1,9 +1,9 @@
-import { Image } from 'react-bootstrap';
+import { Form, Image } from 'react-bootstrap';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import ProductCard from '../components/ProductCard';
 import { getCartIds, getSingleOrderDetails } from '../api/orderData';
-import { updateOrderProductQuantity } from '../api/orderProductData';
+import { deleteProductFromOrder, updateOrderProductQuantity } from '../api/orderProductData';
 import { useAuth } from '../utils/context/authContext';
 
 export default function Cart() {
@@ -56,6 +56,20 @@ export default function Cart() {
     router.push(`/order/edit/${orderData.id}?totalPrice=${totalPrice}`);
   };
 
+  const handleDelete = async (productId) => {
+    const isConfirmed = window.confirm('Are you sure you want to remove this product from your cart?');
+    if (isConfirmed) {
+      try {
+        await deleteProductFromOrder(orderData.id, productId);
+        const updatedProducts = orderData.products.filter((product) => product.id !== productId);
+        setOrderData({ ...orderData, products: updatedProducts });
+        calculateTotals(updatedProducts);
+      } catch (err) {
+        console.error('Error deleting product:', err);
+      }
+    }
+  };
+
   useEffect(() => {
     if (user) {
       fetchCart().then((cartData) => {
@@ -65,17 +79,17 @@ export default function Cart() {
       });
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+  }, [user, orderData]);
 
   return (
     <div className="title-container">
       <h1>Order Details</h1>
       <div>
         {orderData.user && (
-          <div key={orderData.user?.id} className="order-container">
+          <div key={orderData.user.id} className="order-container">
             <div>
-              <Image src={orderData.user?.image} className="userImageReview" alt="User profile" />
-              <p>{orderData.user?.firstName} {orderData.user?.lastName}</p>
+              <Image src={orderData.user.image} className="userImageReview" alt="User profile" />
+              <p>{orderData.user.firstName} {orderData.user.lastName}</p>
             </div>
             <table>
               <thead>
@@ -95,32 +109,50 @@ export default function Cart() {
                 </tr>
               </tbody>
             </table>
-
           </div>
         )}
-        {!orderData.products && <p>No products in the order, yet!</p> }
-        <div className="product-list">
-          {orderData.products && orderData.products.map((product) => (
-            <div>
-              <ProductCard key={product.id} productObj={product} />
-              <input
-                key={`${product.id}-input`}
-                type="number"
-                value={product.quantity}
-                onChange={(e) => handleQuantityChange(product.id, parseInt(e.target.value, 10))}
-                min="1"
-              />
-
-            </div>
-          ))}
+        {!orderData.products && <p>No products in the order, yet!</p>}
+        {orderData.products && (
+          <div className="product-list">
+            <h2>Products In Order:</h2>
+            {orderData.products.map((product) => (
+              <div key={product.id} className="product-item">
+                <ProductCard productObj={product} onDelete={handleDelete} />
+                <Form>
+                  <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                    <Form.Label>Quantity:</Form.Label>
+                    <Form.Control
+                      key={`${product.id}-input`}
+                      type="number"
+                      value={product.quantity}
+                      onChange={(e) => handleQuantityChange(product.id, parseInt(e.target.value, 10))}
+                      min="1"
+                    />
+                  </Form.Group>
+                </Form>
+              </div>
+            ))}
+          </div>
+        )}
+        <div className="order-summary">
+          <h2>Order Summary</h2>
+          <table>
+            <tbody>
+              <tr>
+                <th>Total Products</th>
+                <td>{totalProducts}</td>
+              </tr>
+              <tr>
+                <th>Total Price</th>
+                <td>${totalPrice}</td>
+              </tr>
+              {/* Add more rows for additional summary details if needed */}
+            </tbody>
+          </table>
         </div>
-
-        <h3>Order Summary</h3>
-        <p>Total Products: {totalProducts}</p>
-        <p>Total Price: ${totalPrice}</p>
       </div>
       <div>
-        <button type="button" onClick={handleCheckout}>Checkout</button>
+        <button className="checkout-button" type="button" onClick={handleCheckout}>Checkout</button>
       </div>
     </div>
   );

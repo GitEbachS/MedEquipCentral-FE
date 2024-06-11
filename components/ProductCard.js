@@ -9,7 +9,9 @@ import { useAuth } from '../utils/context/authContext';
 
 import { addToFavoriteslist, getFavoritesList, removeFromFavoriteslist } from '../api/favoritesListData';
 
-const ProductCard = ({ productObj, onDelete, isAdmin }) => {
+const ProductCard = ({
+  productObj, onDelete, isAdmin,
+}) => {
   const { user } = useAuth();
   const [cart, setCart] = useState({});
   const [viewOrderDetails, setViewOrderDetails] = useState({});
@@ -158,7 +160,7 @@ const ProductCard = ({ productObj, onDelete, isAdmin }) => {
           <p>Price: ${productObj.price}</p>
           {/* <p>Description: {productObj.description}</p>
             <p>Category: {productObj.category?.name}</p> */}
-          {productObj.quantity > 0 && <p>Quantity: {productObj.quantity}</p>}
+          {/* {productObj.quantity > 0 && <p>Quantity: {productObj.quantity}</p>} */}
           {productQuantityInOrder() > 0 && <p>&nbsp; |  &nbsp;{productQuantityInOrder()} in order</p>}
         </div>
 
