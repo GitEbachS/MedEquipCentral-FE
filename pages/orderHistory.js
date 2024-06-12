@@ -23,24 +23,38 @@ const OrderHistoryPage = () => {
   const handleReorder = (orderId) => orderId;
 
   return (
-    <div className="title-container">
+    <div className="title-container historyGrid">
       <h1>Order History</h1>
       {orders.length === 0 ? (
         <p>No orders found.</p>
       ) : (
         <div>
           {orders.map((order) => (
-            <div key={order.id}>
-              <div>Order ID: {order.id}</div>
-              <div>Total Price: ${order.total}</div>
-              <div>{order.closeDate ? `Date Closed: ${new Date(order.closeDate).toLocaleDateString('en-US')}` : ''}</div>
-
-              <div>Status: {order.isClosed ? 'Closed' : 'Open'}</div>
-              <div className="history-btnActions">
+            <div className="flex-container" key={order.id}>
+              <table className="historyTable">
+                <thead>
+                  <tr>
+                    <th>Order ID</th>
+                    <th>Total Price</th>
+                    <th>Date Closed </th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>#{order.id}</td>
+                    <td>${order.total}</td>
+                    <td>{order.closeDate ? `Date Closed: ${new Date(order.closeDate).toLocaleDateString('en-US')}` : ''}</td>
+                    <td>{order.isClosed ? 'Closed' : 'Open'}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div className="history-btn-container">
                 <Link href={`/order/${order.id}`} passHref>
-                  <button type="button">View Order Details</button>
+                  <button className="history-btnActions detailsBtn" type="button">Order Details</button>
                 </Link>
-                <button type="button" onClick={() => handleReorder(order.id)}>Reorder</button>
+
+                <button className="history-btnActions" type="button" onClick={() => handleReorder(order.id)}>Reorder</button>
               </div>
 
             </div>
