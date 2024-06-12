@@ -28,7 +28,7 @@ const FavoritesProductCard = ({ productObj, onUpdate }) => {
 
           <div>
             <div>
-              <button type="button" onClick={() => handleListClick(productObj.id)}>
+              <button className="checkout-button" type="button" onClick={() => handleListClick(productObj.id)}>
                 Remove
               </button>
 

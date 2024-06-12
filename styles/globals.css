@@ -29,7 +29,7 @@ body {
 }
 
 .navHover:hover {
-  background-color: #527972;
+  background-color: #7BAAAA;
   color: white;
 }
 
@@ -137,6 +137,10 @@ body {
 
 
 .card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items:center;
   width: 100%;
   max-width: 400px;
   min-width: 208px;
@@ -150,6 +154,14 @@ body {
       margin-left: 5px;
       font-family: Verdana, sans-serif;
       color: rgb(78, 77, 77);
+    }
+    .adminActions button {
+      border: 2px solid #C88ADB;
+      color: rgb(94, 92, 92);
+    }
+    .adminActions button:hover {
+      border: 2px solid #9014B6;
+      color: rgb(10, 10, 10);
     }
 }
 
@@ -184,20 +196,20 @@ body {
 .card-btnActions button{
   height: 40px; 
   width: 100px;
-  padding: 0px;
+  padding: 2px;
   margin-left: 3px;
   margin-right: 3px;
-  font-family: Geneva;
-  background-color: #e9d4e9;
-  color: rgb(105, 102, 105);
+  font-family: Calibri, 'Trebuchet MS', sans-serif;
+  background-color: #C88ADB;
+  color: rgb(250, 233, 250);
   border-radius: 16px;
-  border: 1px solid #d77bf3;
+  border: 1px solid #9014B6;
   font-size: 12px;
 }
 
 .card-btnActions button:hover {
   color: rgb(208, 209, 205);
-  background-color: #d77bf3;
+  background-color: #9014B6;
 }
 
 /* index page */
@@ -234,7 +246,7 @@ body {
 
 .categoryButtons button {
   border: none;
-  background-color: hsl(286, 60%, 36%); 
+  background-color: #9014B6; 
   border-radius: 50%; 
   color: rgb(253, 253, 247);
   width: 85px; 
@@ -246,13 +258,12 @@ body {
   font-weight: bold;
 }
 
-.categoryButtons button:hover {
-  width: 90px; 
-  height: 90px;  
-  background-color: #9014b6;
+.categoryButtons button:hover { 
+  background-color: #C88ADB;
 }
 
 .categoryButtons button.selected {
+  background-color: #C88ADB;
   color: #fff;
 }
 
@@ -268,10 +279,9 @@ body {
   padding: 3px;
   font-family: Calibri, 'Trebuchet MS', sans-serif;
   font-size: 37px;
-  font-style: italic;
   text-align: center;
   border-top: 1px solid #b3e5fc;
-  background: linear-gradient(45deg, #b3e5fc, #b3e5fc); 
+  background-color: hsl(180, 48%, 67%, 0.45);
   color: rgb(87, 86, 86);
 }
 
@@ -279,8 +289,10 @@ body {
 Form {
   margin-top: 20px;
   h2 {
-    font-family:'Courier New', Courier, monospace;
-    font-size: 45px;
+    font-family: Calibri, 'Trebuchet MS', sans-serif;
+    color: #7E8E8E;
+    font-size: 55px;
+    font-weight: 500;;
     margin-bottom: 20px;
   }
   label {
@@ -288,21 +300,22 @@ Form {
     font-size: 20px;
   }
   button {
-    font-family: monospace;
-    font-size: 20px;
-    padding: 8px;
-    background: linear-gradient(45deg, #b3e5fc, #e7ee8d); 
-    color: rgb(87, 86, 86);
-    border-radius: 30px;
-    border: 2px solid rgb(89, 186, 216);
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #77D4D4;
+  color: #7E8E8E;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
   }
   button:hover {
-    border: 2px solid #91d6f7;
-    background: linear-gradient(45deg, rgb(89, 186, 216), rgb(89, 186, 216));
+    background-color: #7BAAAA; 
     color: white;
   }
   .form-control, .form-select {
-    border: 2px solid rgb(89, 186, 216);
+    border: 2px solid #74F0F0;
+    color:rgb(87, 86, 86);
   }
  
 }
@@ -315,12 +328,12 @@ Form {
   padding: 20px;
 }
 .cat-title {
-  border: 2px solid rgb(247, 209, 140);
-  background-color: rgb(247, 209, 140);
+  background-color: hsl(0, 48%, 67%, 0.97);
   border-radius: 4px;
   text-align: center;
-  color: rgb(80, 78, 78);
-  font-family: fantasy;
+  color: rgb(230, 225, 225);
+  font-family: Calibri, 'Trebuchet MS', sans-serif;
+  font-size: 35px;
 }
 
 /* Cart Page */
@@ -353,7 +366,7 @@ Form {
 
       /* Table header background color */
       thead tr {
-        background-color: hsl(286, 60%, 36%);
+        background-color: #9E31BF;
         color: #ffffff;
       }
 
@@ -499,8 +512,8 @@ margin-left: 10px;
   margin-top: 20px; 
   padding: 10px 20px;
   font-size: 16px;
-  background-color: #4dcc03;
-  color: #fff;
+  background-color: #77D4D4;
+  color: #eef8f8;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -508,5 +521,6 @@ margin-left: 10px;
 }
 
 .checkout-button:hover {
-  background-color: #47a902; /* Darken the background color on hover */
+  background-color: #7BAAAA; 
+  color: white;
 }
