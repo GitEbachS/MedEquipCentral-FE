@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../utils/context/authContext';
 import { getSingleOrderHistory } from '../../api/orderData';
-import SimilarItemsCard from '../../components/SimilarItemsCard';
+import ProductCard from '../../components/ProductCard';
 
 export default function ViewOrder() {
   const router = useRouter();
@@ -54,8 +54,8 @@ export default function ViewOrder() {
             <div className="chartGrid">
 
               {orderData.products.map((product) => (
-                <div key={product.id} className="product-item">
-                  <SimilarItemsCard productObj={product} />
+                <div key={product.id}>
+                  <ProductCard productObj={product} />
                 </div>
               ))}
             </div>

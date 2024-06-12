@@ -9,10 +9,10 @@ const OrderConfirmationPage = () => (
       <p className="mb-4">Thank you for shopping with us.</p>
       <div className="d-flex justify-content-center">
         <Link href="/orderHistory" passHref>
-          <p className="btn btn-primary mx-2 confirmationButton">View Order History</p>
+          <button type="button" className="confirmationButton">View Order History</button>
         </Link>
-        <Link href="/products" passHref>
-          <p className="btn btn-secondary mx-2 confirmationButton">Continue Shopping</p>
+        <Link href="/" passHref>
+          <button type="button" className="confirmationButton">Continue Shopping</button>
         </Link>
       </div>
     </div>

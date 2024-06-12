@@ -59,7 +59,7 @@ FavoritesProductCard.propTypes = {
         description: PropTypes.string.isRequired,
         price: PropTypes.number.isRequired,
       }),
-    ).isRequired,
+    ),
   }).isRequired,
   onUpdate: PropTypes.func.isRequired,
 };

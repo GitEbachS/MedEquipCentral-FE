@@ -648,6 +648,9 @@ margin-left: 10px;
   font-size: 1rem;
   padding: 10px 20px;
   border-radius: 5px;
+  border: 2px solid hsl(0, 48%, 67%, 0.88);
+  background-color: hsl(0, 48%, 67%, 0.88);
+  color: #eef8f8;
 }
 
 .confirmationButton:hover {

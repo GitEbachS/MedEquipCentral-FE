@@ -35,7 +35,6 @@ const ProductForm = ({ productObj }) => {
     if (productObj.id) {
       updateProduct(productObj.id, formInput).then(() => router.push(`/product/${productObj.id}`));
     } else {
-      console.warn(formInput);
       createProduct(formInput)?.then((product) => router.push(`/product/${product.id}`));
     }
   };
