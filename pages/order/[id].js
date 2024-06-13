@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../utils/context/authContext';
 import { getSingleOrderHistory } from '../../api/orderData';
 import ProductCard from '../../components/ProductCard';
+import { deleteProductFromOrder } from '../../api/orderProductData';
 
 export default function ViewOrder() {
   const router = useRouter();
@@ -21,6 +22,20 @@ export default function ViewOrder() {
     fetchOrderDetails();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
+
+  const handleRemoveFromOrder = async (productId) => {
+    try {
+      // Implement logic to remove product from order using orderData and product ID
+      const updatedProducts = orderData.products.filter((product) => product.id !== productId);
+      const updatedOrderData = { ...orderData, products: updatedProducts };
+      setOrderData(updatedOrderData);
+
+      // Implement API call or logic to update backend if necessary
+      await deleteProductFromOrder(orderData.id, productId);
+    } catch (error) {
+      console.error('Error occurred while removing product from order:', error);
+    }
+  };
 
   return (
     <div className="title-container">
@@ -55,7 +70,7 @@ export default function ViewOrder() {
 
               {orderData.products.map((product) => (
                 <div key={product.id}>
-                  <ProductCard productObj={product} />
+                  <ProductCard productObj={product} onRemoveFromOrder={handleRemoveFromOrder} />
                 </div>
               ))}
             </div>

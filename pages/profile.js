@@ -11,17 +11,29 @@ export default function Profile() {
   const [userReviews, setUserReviews] = useState([]);
   const { user } = useAuth();
 
-  const getUserDetails = () => {
-    getSingleUser(user.id).then(setSingleUser);
+  const getUserDetails = async () => {
+    try {
+      const userData = await getSingleUser(user.id);
+      setSingleUser(userData);
+    } catch (error) {
+      console.error('Error fetching user details:', error);
+    }
   };
 
-  const allReviews = () => {
-    getReviewsByUserId(user.id).then(setUserReviews);
+  // Function to fetch user reviews
+  const fetchUserReviews = async () => {
+    try {
+      const reviews = await getReviewsByUserId(user.id);
+      setUserReviews(reviews);
+    } catch (error) {
+      console.error('Error fetching user reviews:', error);
+      setUserReviews([]); // Set empty array if there's an error
+    }
   };
 
   useEffect(() => {
     getUserDetails();
-    allReviews();
+    fetchUserReviews();
   }, [user]);
 
   return (
