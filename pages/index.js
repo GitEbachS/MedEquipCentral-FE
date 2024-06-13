@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+// import { Image } from 'react-bootstrap';
 import { useAuth } from '../utils/context/authContext';
 import { getSingleUser } from '../api/userData';
 import UserForm from '../components/forms/UserForm';
@@ -19,7 +20,7 @@ function Home() {
   };
 
   useEffect(() => {
-    if (user?.id) {
+    if (user) {
       fetchUser();
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -32,11 +33,12 @@ function Home() {
 
   return (
     <>
-      <h1>{currentUser === null ? 'Create an Account' : 'MedEquipCentral'}</h1>
+      <h1 className="home-title">{currentUser === null ? 'Create an Account' : 'MedEquipCentral'}</h1>
       {currentUser === null ? (
         <UserForm onUpdate={onUpdate} />
       ) : (
         <div className="general-btns-container">
+          {/* <Image src={productObj.image} alt={backgroun} className="productImage" /> */}
           <button type="button" onClick={() => router.push('/products')}>View All Products</button>
           <button type="button" onClick={() => router.push('/cart')}>View Cart</button>
           <button type="button" onClick={() => router.push('/profile')}>View Profile</button>

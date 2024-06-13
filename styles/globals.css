@@ -743,3 +743,29 @@ margin-left: 10px;
 .productBody {
   margin: 60px auto;
 }
+
+/* Index Page */
+.general-btns-container{
+  display: flex;
+  margin: 60px auto;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  button {
+  width: 300px;
+  border: 2px solid rgb(97, 209, 209);
+  color: rgb(81, 152, 165);
+  font-size: 20px;
+  }
+  button:hover {
+    background-color: rgb(97, 209, 209);
+    color: white;
+  }
+}
+.home-title {
+  margin: 140px auto;
+  text-align: center;
+
+}
