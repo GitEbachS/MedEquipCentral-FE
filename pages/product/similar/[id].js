@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { Card, Image } from 'react-bootstrap';
+import {
+  Card, Col, Image, Row,
+} from 'react-bootstrap';
 import { useAuth } from '../../../utils/context/authContext';
 import { addSimilarItem, deleteSimilarItem, getSimilarItems } from '../../../api/similarItemData';
 import { getProducts, getSingleProduct } from '../../../api/productData';
@@ -103,59 +105,68 @@ function AddSimilarItems() {
 
   return (
     <div>
-      <div>
-        <h1>Select Similar Items For The Products</h1>
-        <h2>**Admin Only**</h2>
-        <div>
-          <Card className="card-style" style={{ height: '200px' }}>
-            <Card.Body>
-              <div className="product-details">
-                <h2>{singleProduct.name}</h2>
-                <Image src={singleProduct.image} alt={singleProduct.name} style={{ height: '100px' }} />
-                <p>Price: ${singleProduct.price}</p>
-                <p>Description: {singleProduct.description}</p>
-                <p>Category: {singleProduct.category?.name}</p>
-                {singleProduct.quantity > 0 && <p>Quantity: {singleProduct.quantity}</p>}
-              </div>
-            </Card.Body>
-          </Card>
-        </div>
-      </div>
-      <div className="similar-container">
-        {similarItems.map((similarItem) => (
-          <div key={similarItem.id}>
-            <Card className="card-style" style={{ height: '250px' }}>
+      <div className="header-container">
+        <h1>Product Details</h1>
+        <h5>Admin Only</h5>
+        <Row>
+          {/* Single item */}
+          <Col md={6}>
+            <Card style={{ height: '350px' }}>
               <Card.Body>
-                <button type="button" onClick={() => handleListClick(similarItem.id)}>-</button>
-                <Image src={similarItem.image} alt={similarItem.name} style={{ height: '100px' }} />
-                <div className="similarItem-details">
-                  <h2>{similarItem.name}</h2>
-                  <p>Category: {similarItem.category?.name}</p>
+                <div className="product-details card-style">
+                  <h2>{singleProduct.name}</h2>
+                  <Image src={singleProduct.image} alt={singleProduct.name} style={{ height: '100px' }} />
+                  <p>Price: ${singleProduct.price}</p>
+                  <p>Description: {singleProduct.description}</p>
+                  <p><span className="category-name">Category:</span> {singleProduct.category?.name}</p>
+                  {singleProduct.quantity > 0 && <p>Quantity: {singleProduct.quantity}</p>}
                 </div>
               </Card.Body>
             </Card>
-          </div>
-        ))}
+          </Col>
+          {/* Similar items */}
+          <Col md={6}>
+            <Row>
+              {similarItems.map((similarItem) => (
+                <Col key={similarItem.id} sm={6} md={4} style={{ margin: '5px 20px' }}>
+                  <Card style={{ width: '200px' }}>
+                    <Card.Body className="card-style">
+                      <button type="button" className="similarBtnTwo" onClick={() => handleListClick(similarItem.id)}>-</button>
+                      <Image src={similarItem.image} alt={similarItem.name} style={{ height: '70px' }} />
+                      <div className="similarItem-details">
+                        <h6>{similarItem.name}</h6>
+                        <p><span className="category-name">Category:</span> {similarItem.category?.name}</p>
+                      </div>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              ))}
+            </Row>
+          </Col>
+        </Row>
       </div>
+      {/* Bottom section with all products */}
+
       <div className="similar-container">
-        {allProducts.filter((product) => product.id !== singleProduct.id).map((product) => (
-          <div key={product.id}>
-            <Card className="card-style" style={{ height: '250px' }}>
-              <Card.Body>
-                <button type="button" onClick={() => handleListClick(product.id)}>{buttonStates[product.id]}</button>
-                <Image src={product.image} alt={product.name} style={{ height: '100px' }} />
-
-                <div className="product-details">
-                  <h2>{product.name}</h2>
-                  <p>Category: {product.category?.name}</p>
-                </div>
-
-              </Card.Body>
-
-            </Card>
-
-          </div>
-        ))}
+        <h2 className="similar-title">Select Similar Items For The Product</h2>
+        <Row xs={1} md={5}>
+          {allProducts
+            .filter((product) => product.id !== singleProduct.id)
+            .map((product) => (
+              <Col key={product.id}>
+                <Card>
+                  <Card.Body className="card-style">
+                    <button className="similarBtn" type="button" onClick={() => handleListClick(product.id)}>{buttonStates[product.id]}</button>
+                    <Image src={product.image} alt={product.name} style={{ height: '100px' }} />
+                    <div className="product-details">
+                      <h2>{product.name}</h2>
+                      <p><span className="category-name">Category:</span> {product.category?.name}</p>
+                    </div>
+                  </Card.Body>
+                </Card>
+              </Col>
+            ))}
+        </Row>
       </div>
     </div>
   );

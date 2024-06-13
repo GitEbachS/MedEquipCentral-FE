@@ -58,7 +58,12 @@ const getReviewsByUserId = (userId) => new Promise((resolve, reject) => {
       'Content-Type': 'application/json',
     },
   })
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Failed to fetch reviews');
+      }
+      return response.json();
+    })
     .then((data) => {
       if (data) {
         resolve(Object.values(data));
@@ -66,8 +71,12 @@ const getReviewsByUserId = (userId) => new Promise((resolve, reject) => {
         resolve([]);
       }
     })
-    .catch(reject);
+    .catch((error) => {
+      console.error('Error fetching user reviews:', error);
+      reject(error);
+    });
 });
+
 export {
   deleteReview, updateReview, createReview, getReviewsByUserId, getSingleReview,
 };

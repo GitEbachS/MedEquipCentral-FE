@@ -52,6 +52,7 @@ const Checkout = ({ orderObj }) => {
           value={formInput.creditCardNumber}
           onChange={handleChange}
           placeholder="Credit Card Number"
+          className="w-100"
           required
         />
       </Form.Group>
@@ -75,6 +76,7 @@ const Checkout = ({ orderObj }) => {
           value={formInput.cvv}
           onChange={handleChange}
           placeholder="CVV"
+          className="w-100"
           required
         />
       </Form.Group>
@@ -87,6 +89,7 @@ const Checkout = ({ orderObj }) => {
           value={formInput.zip}
           onChange={handleChange}
           placeholder="Zip"
+          className="w-100"
           required
         />
       </Form.Group>

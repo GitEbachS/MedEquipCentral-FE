@@ -10,7 +10,7 @@ import { useAuth } from '../utils/context/authContext';
 import { addToFavoriteslist, getFavoritesList, removeFromFavoriteslist } from '../api/favoritesListData';
 
 const ProductCard = ({
-  productObj, onDelete, isAdmin,
+  productObj, onDelete, isAdmin, onRemoveFromOrder,
 }) => {
   const { user } = useAuth();
   const [cart, setCart] = useState({});
@@ -58,6 +58,10 @@ const ProductCard = ({
       } else {
         await deleteProductFromOrder(cart.orderId, productObj.id);
         setButtonText('Add to Order');
+        const updatedOrderDetails = await getSingleOrderDetails(user.id, cart.orderId);
+        setViewOrderDetails(updatedOrderDetails);
+        // Execute callback to remove from order in ViewOrder page
+        onRemoveFromOrder(productObj.id);
       }
       getOrder();
     } catch (error) {
@@ -200,10 +204,12 @@ ProductCard.propTypes = {
   }).isRequired,
   isAdmin: PropTypes.bool,
   onDelete: PropTypes.func,
+  onRemoveFromOrder: PropTypes.func,
 };
 ProductCard.defaultProps = {
   onDelete: null,
   isAdmin: null,
+  onRemoveFromOrder: null,
 };
 
 export default ProductCard;

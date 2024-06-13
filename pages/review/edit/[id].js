@@ -13,7 +13,5 @@ export default function UpdateReview() {
     getSingleReview(id).then(setEditItem);
   }, [id]);
 
-  console.warn(editItem);
-
   return <ReviewForm reviewObj={editItem} />;
 }

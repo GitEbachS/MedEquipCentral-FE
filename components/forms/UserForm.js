@@ -37,7 +37,7 @@ const UserForm = ({ userObj, onUpdate }) => {
     if (userObj.id) {
       updateUser(userObj.id, userData).then(() => router.push('/'));
     } else {
-      registerUser({ ...userData, uid: user.uid })?.then(onUpdate);
+      registerUser({ ...userData, uid: user.uid }).then(onUpdate);
     }
   };
   useEffect(() => {

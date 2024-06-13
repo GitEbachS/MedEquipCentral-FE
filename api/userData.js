@@ -16,7 +16,7 @@ const updateUser = (userId, payload) => new Promise((resolve, reject) => {
 });
 
 const getSingleUser = (userId) => new Promise((resolve, reject) => {
-  fetch(`${endpoint}/singleuser/${userId}`, {
+  fetch(`${endpoint}/singleUser/${userId}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
