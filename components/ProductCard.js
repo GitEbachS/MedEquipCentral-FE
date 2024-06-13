@@ -61,7 +61,7 @@ const ProductCard = ({
         const updatedOrderDetails = await getSingleOrderDetails(user.id, cart.orderId);
         setViewOrderDetails(updatedOrderDetails);
         // Execute callback to remove from order in ViewOrder page
-        onRemoveFromOrder(productObj.id);
+        if (onRemoveFromOrder) onRemoveFromOrder(productObj.id);
       }
       getOrder();
     } catch (error) {
@@ -209,7 +209,7 @@ ProductCard.propTypes = {
 ProductCard.defaultProps = {
   onDelete: null,
   isAdmin: null,
-  onRemoveFromOrder: null,
+  onRemoveFromOrder: () => {},
 };
 
 export default ProductCard;
