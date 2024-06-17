@@ -50,6 +50,9 @@ export default function Profile() {
             <h2 className="userInfo">Job Function: {singleUser.jobFunction?.name}</h2>
             {singleUser.isBizOwner && <h2 className="userInfo"> Business Owner<Image src="https://png.pngtree.com/png-vector/20191113/ourmid/pngtree-green-check-mark-icon-flat-style-png-image_1986021.jpg" alt="checkmark" className="checkmark" /></h2>}
             {singleUser.isAdmin && <h2 className="userInfo"> Admin<Image src="https://png.pngtree.com/png-vector/20191113/ourmid/pngtree-green-check-mark-icon-flat-style-png-image_1986021.jpg" alt="checkmark" className="checkmark" /></h2>}
+            <Link href={`/user/edit/${user.id}`} passHref>
+              <button type="button" className="checkout-button">Edit Profile</button>
+            </Link>
           </div>
         </div>
       </div>

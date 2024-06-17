@@ -10,7 +10,7 @@ import { useAuth } from '../utils/context/authContext';
 import { addToFavoriteslist, getFavoritesList, removeFromFavoriteslist } from '../api/favoritesListData';
 
 const ProductCard = ({
-  productObj, onDelete, isAdmin, onRemoveFromOrder,
+  productObj, onDelete, isAdmin, onRemoveFromOrder, isClosed,
 }) => {
   const { user } = useAuth();
   const [cart, setCart] = useState({});
@@ -167,7 +167,7 @@ const ProductCard = ({
           {/* {productObj.quantity > 0 && <p>Quantity: {productObj.quantity}</p>} */}
           {productQuantityInOrder() > 0 && <p>&nbsp; |  &nbsp;{productQuantityInOrder()} in order</p>}
         </div>
-
+        {!isClosed && (
         <div>
           <div className="card-btnActions">
 
@@ -181,7 +181,7 @@ const ProductCard = ({
           </div>
 
         </div>
-
+        )}
       </Card>
 
     </>
@@ -205,11 +205,13 @@ ProductCard.propTypes = {
   isAdmin: PropTypes.bool,
   onDelete: PropTypes.func,
   onRemoveFromOrder: PropTypes.func,
+  isClosed: PropTypes.bool,
 };
 ProductCard.defaultProps = {
   onDelete: null,
   isAdmin: null,
   onRemoveFromOrder: () => {},
+  isClosed: false,
 };
 
 export default ProductCard;

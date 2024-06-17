@@ -32,7 +32,7 @@ function Home() {
   };
 
   return (
-    <>
+    <div className="text-center d-flex flex-column justify-content-center align-content-center indexDecor">
       <h1 className="home-title">{currentUser === null ? 'Create an Account' : 'MedEquipCentral'}</h1>
       {currentUser === null ? (
         <UserForm onUpdate={onUpdate} />
@@ -44,7 +44,7 @@ function Home() {
           <button type="button" onClick={() => router.push('/profile')}>View Profile</button>
         </div>
       )}
-    </>
+    </div>
   );
 }
 

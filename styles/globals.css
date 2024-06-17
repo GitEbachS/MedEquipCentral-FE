@@ -746,6 +746,7 @@ margin-left: 10px;
 
 /* Index Page */
 .general-btns-container{
+ 
   display: flex;
   margin: 60px auto;
   flex-direction: column;
@@ -768,4 +769,19 @@ margin-left: 10px;
   margin: 140px auto;
   text-align: center;
 
+}
+
+.indexDecor {
+  height: 90vh;
+  padding: 30px;
+  margin: 0 auto;
+  z-index: 1;
+  min-height: 25rem;
+  width: 100%;
+  min-width: 30rem;
+  padding-block: 0 5rem;
+  background-image: url('https://img.freepik.com/free-vector/gradient-hexagonal-background_23-2148939501.jpg?w=1060&t=st=1718217137~exp=1718217737~hmac=3adf73fca00c9ac3aa4725ac12196cc260aedd577a9061c520b1e1c45259184d');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.8;
 }
