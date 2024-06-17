@@ -20,7 +20,7 @@ const OrderHistoryPage = () => {
     fetchUserOrders();
   }, [user]);
 
-  const handleReorder = (orderId) => orderId;
+  // const handleReorder = (orderId) => orderId;
 
   return (
     <div className="title-container historyGrid">
@@ -54,7 +54,7 @@ const OrderHistoryPage = () => {
                   <button className="history-btnActions detailsBtn" type="button">Order Details</button>
                 </Link>
 
-                <button className="history-btnActions" type="button" onClick={() => handleReorder(order.id)}>Reorder</button>
+                {/* <button className="history-btnActions" type="button" onClick={() => handleReorder(order.id)}>Reorder</button> */}
               </div>
 
             </div>

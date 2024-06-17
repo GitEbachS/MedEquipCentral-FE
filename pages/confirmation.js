@@ -29,7 +29,7 @@ const OrderConfirmationPage = () => {
           <Link href="/orderHistory" passHref>
             <button type="button" className="confirmationButton">View Order History</button>
           </Link>
-          <Link href="/" passHref>
+          <Link href="/products" passHref>
             <button type="button" className="confirmationButton">Continue Shopping</button>
           </Link>
         </div>

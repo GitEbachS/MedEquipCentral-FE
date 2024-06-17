@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Form from 'react-bootstrap/Form';
 import { useRouter } from 'next/router';
-import updateUser from '../../api/userData';
 import { registerUser } from '../../utils/auth';
 import { useAuth } from '../../utils/context/authContext';
 import getJobFunctions from '../../api/jobFunctionData';
+import { updateUser } from '../../api/userData';
 
 const intitialState = {
   firstName: '',
@@ -35,7 +35,7 @@ const UserForm = ({ userObj, onUpdate }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (userObj.id) {
-      updateUser(userObj.id, userData).then(() => router.push('/'));
+      updateUser(userObj.id, userData).then(() => router.push('/profile'));
     } else {
       registerUser({ ...userData, uid: user.uid }).then(onUpdate);
     }
@@ -155,9 +155,10 @@ UserForm.propTypes = {
     jobFunctionId: PropTypes.number,
     isBizOwner: PropTypes.bool,
   }),
-  onUpdate: PropTypes.func.isRequired,
+  onUpdate: PropTypes.func,
 };
 UserForm.defaultProps = {
   userObj: intitialState,
+  onUpdate: null,
 };
 export default UserForm;

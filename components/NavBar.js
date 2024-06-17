@@ -36,6 +36,9 @@ export default function NavBar() {
             <Link passHref href="/">
               <Nav.Link className="navHover">Home</Nav.Link>
             </Link>
+            <Link passHref href="/products">
+              <Nav.Link className="navHover">Products</Nav.Link>
+            </Link>
             <Link passHref href="/favoritesList">
               <Nav.Link className="navHover">Favorites List</Nav.Link>
             </Link>

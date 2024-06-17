@@ -70,7 +70,7 @@ export default function ViewOrder() {
 
               {orderData.products.map((product) => (
                 <div key={product.id}>
-                  <ProductCard productObj={product} onRemoveFromOrder={handleRemoveFromOrder} />
+                  <ProductCard productObj={product} onRemoveFromOrder={handleRemoveFromOrder} isClosed={orderData.isClosed} />
                 </div>
               ))}
             </div>
