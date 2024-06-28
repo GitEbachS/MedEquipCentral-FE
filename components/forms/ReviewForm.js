@@ -27,7 +27,7 @@ export default function ReviewForm({ reviewObj }) {
       [e.target.name]: e.target.value,
     });
   };
-
+  // handle rating
   const handleRatingChange = (newRating) => {
     setReviewData((prevState) => ({
       ...prevState,
