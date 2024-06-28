@@ -8,6 +8,7 @@ import { getSingleProduct } from '../../api/productData';
 import { useAuth } from '../../utils/context/authContext';
 import { getSingleUser } from '../../api/userData';
 import { getSimilarItems } from '../../api/similarItemData';
+import { deleteReview } from '../../api/reviewData';
 
 export default function ViewProductDetails() {
   const router = useRouter();
@@ -32,7 +33,9 @@ export default function ViewProductDetails() {
   const handleUpdateProductClick = () => {
     router.push(`/product/edit/${id}`);
   };
-
+  const handleDeleteReview = (reviewId) => {
+    deleteReview(reviewId).then(() => productData());
+  };
   useEffect(() => {
     productData();
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -124,9 +127,16 @@ export default function ViewProductDetails() {
                           </div>
                           <p className="card-text"><small className="text-muted">Created on {review.dateCreated}</small></p>
                           <p className="card-text">{review.commentReview}</p>
-                          <Link href={`/review/edit/${review.id}`} passHref>
-                            <button type="button" className="checkout-button">Edit Review</button>
-                          </Link>
+                          {review.userId === user.id && (
+                            <div>
+                              <Link href={`/review/edit/${review.id}`} passHref>
+                                <button type="button" className="checkout-button">Edit Review</button>
+                              </Link>
+                              <button type="button" className="checkout-button" onClick={() => handleDeleteReview(review.id)}>
+                                Delete Review
+                              </button>
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>

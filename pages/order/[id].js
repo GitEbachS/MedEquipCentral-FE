@@ -6,7 +6,8 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../utils/context/authContext';
 import { getSingleOrderHistory } from '../../api/orderData';
 import ProductCard from '../../components/ProductCard';
-import { deleteProductFromOrder } from '../../api/orderProductData';
+// import { deleteProductFromOrder } from '../../api/orderProductData';
+// Deleted the extra deleteProduct api call in the handleclick
 
 export default function ViewOrder() {
   const router = useRouter();
@@ -29,9 +30,9 @@ export default function ViewOrder() {
       const updatedProducts = orderData.products.filter((product) => product.id !== productId);
       const updatedOrderData = { ...orderData, products: updatedProducts };
       setOrderData(updatedOrderData);
-
+      fetchOrderDetails();
       // Implement API call or logic to update backend if necessary
-      await deleteProductFromOrder(orderData.id, productId);
+      // await deleteProductFromOrder(orderData.id, productId);
     } catch (error) {
       console.error('Error occurred while removing product from order:', error);
     }

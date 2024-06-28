@@ -139,9 +139,12 @@ function Products() {
     <>
 
       <div className="title-container"><h1>Products by Category</h1>
+        {isAdmin && (
         <Link href="/product/new" passHref>
           <button className="create-product-btn" type="button">Create Product</button>
         </Link>
+        )}
+
       </div>
 
       <div className="index-container">
